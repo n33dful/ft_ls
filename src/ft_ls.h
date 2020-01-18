@@ -5,6 +5,10 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
+#include <sys/errno.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <time.h>
 #include "../libft/libft.h"
 
 typedef struct		s_queue

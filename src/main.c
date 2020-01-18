@@ -65,6 +65,44 @@ int		sort_descending(t_list *current, t_list *next)
 	return (0);
 }
 
+int		sort_time_ascenging(t_list *current, t_list *next)
+{
+    struct stat	attrib;
+	char		*first;
+	char		*second;
+	time_t		time_first;
+	time_t		time_second;
+
+	first = current->content;
+	second = next->content;
+    stat(first, &attrib);
+	time_first = attrib.st_mtimespec.tv_sec;
+    stat(second, &attrib);
+	time_second = attrib.st_mtimespec.tv_sec;
+	if (time_first >= time_second)
+		return (1);
+	return (0);
+}
+
+int		sort_time_descenging(t_list *current, t_list *next)
+{
+    struct stat	attrib;
+	char		*first;
+	char		*second;
+	time_t		time_first;
+	time_t		time_second;
+
+	first = current->content;
+	second = next->content;
+    stat(first, &attrib);
+	time_first = attrib.st_mtimespec.tv_sec;
+    stat(second, &attrib);
+	time_second = attrib.st_mtimespec.tv_sec;
+	if (time_first <= time_second)
+		return (1);
+	return (0);
+}
+
 void	del(void *content, size_t content_size)
 {
 	if (content_size > 0)
@@ -107,8 +145,12 @@ void	ft_ls(char *dirname, t_flags *flags)
 	queue = NULL;
 	if (!(ft_readdir(dirname, &list, &queue, flags)))
 		exit(-1);
-	if (flags->r)
+	if (flags->r && !flags->t)
 		list = ft_lstsort(list, sort_descending);
+	else if (!flags->r && flags->t)
+		list = ft_lstsort(list, sort_time_ascenging);
+	else if (flags->r && flags->t)
+		list = ft_lstsort(list, sort_time_descenging);
 	else
 		list = ft_lstsort(list, sort_ascending);
 	ft_lstprint(list);

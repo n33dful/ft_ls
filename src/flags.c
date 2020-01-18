@@ -21,6 +21,6 @@ t_flags			*set_flags(char **argv)
 
 	if (!(flags = create_flags_struct()) && argv)
 		return (NULL);
-	flags->R = 1;
+	flags->t = 1;
 	return(flags);
 }

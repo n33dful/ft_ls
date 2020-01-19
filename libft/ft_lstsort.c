@@ -21,17 +21,16 @@ static t_list	*ft_sort(t_list *list, int (*func)(t_list *, t_list *))
 	return (list);
 }
 
-t_list			*ft_lstsort(t_list *list, int (*func)(t_list *, t_list *))
+void			ft_lstsort(t_list **list, int (*func)(t_list *, t_list *))
 {
 	size_t	len;
 	size_t	i;
 
 	i = 0;
-	len = ft_lstlen(list);
+	len = ft_lstlen((*list));
 	while (i < len)
 	{
-		list = ft_sort(list, func);
+		(*list) = ft_sort((*list), func);
 		i++;
 	}
-	return (list);
 }

@@ -1,5 +1,5 @@
 CC=gcc 
-CPPFLAGS=-Wall -Wextra -Werror -Iincl
+CPPFLAGS=-g -Wall -Wextra -Werror -Iincl
 NAME=ft_ls
 LIBNAME=libft.a
 LIBFILES=ft_isprint.c\
@@ -66,10 +66,12 @@ ft_putendl_fd.c\
 ft_strdup.c\
 ft_strncpy.c\
 ft_lstlen.c\
-ft_lstsort.c
+ft_lstsort.c\
+ft_lstmove.c
 FILES=main.c\
-flags.c\
-queue.c
+ft_setflags.c\
+ft_sortfiles.c\
+ft_printfiles.c
 OBJECTS=$(FILES:.c=.o)
 LIBOBJECTS=$(LIBFILES:.c=.o)
 OBJSDIR=$(addprefix src/, $(OBJECTS))

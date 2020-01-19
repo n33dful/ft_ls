@@ -78,7 +78,8 @@ ft_putendl_fd.c\
 ft_strdup.c\
 ft_strncpy.c\
 ft_lstlen.c\
-ft_lstsort.c
+ft_lstsort.c\
+ft_lstmove.c
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)

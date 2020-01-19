@@ -9,13 +9,16 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <uuid/uuid.h>
 #include "../libft/libft.h"
 
-typedef struct		s_queue
+typedef struct		s_info
 {
-	char			*d_name;
-	struct s_queue	*next;
-}					t_queue;
+	struct dirent	*dirent;
+    struct stat		attrib;
+}					t_info;
 
 typedef struct		s_flags
 {
@@ -26,13 +29,11 @@ typedef struct		s_flags
 	int				t;
 }					t_flags;
 
-t_queue				*create_queue_elem(char *d_name);
-int					add_to_queue(t_queue **queue, t_queue *elem);
-void				delete_queue(t_queue *queue);
-char				*next_elem_in_queue(t_queue **queue);
-t_flags				*set_flags(char **argv);
 
-void				ft_ls(char *dirname, t_flags *flags);
-void				option_R(t_queue *queue, t_flags *flags);
+int					ft_setflags(char **argv, t_flags *flags);
+
+void				ft_ls(char *dir_name, t_flags *flags);
+void				ft_sortfiles(t_flags *flags, t_list **files, t_list **queue);
+void				ft_printfiles(t_list *files);
 
 #endif

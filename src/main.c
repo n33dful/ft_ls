@@ -1,29 +1,6 @@
 
 #include "ft_ls.h"
 
-void	ft_readdir(DIR *dir, t_flags *flags, t_list **files, t_list **queue)
-{
-	t_info			info;
-	t_list			*new;
-
-	while ((info.dirent = readdir(dir)) != NULL)
-	{
-    	stat(info.dirent->d_name, &(info.attrib));
-		if (info.dirent->d_name[0] == '.' && !(*flags).a)
-			continue ;
-		if (!(new = ft_lstnew(&info, sizeof(t_info))))
-			exit(-1);
-		ft_lstadd(files, ft_lstnew(&info, sizeof(t_info)));
-		if ((*flags).R && info.dirent->d_type == 4 \
-&& ft_strcmp(info.dirent->d_name, ".") && ft_strcmp(info.dirent->d_name, ".."))
-		{
-			if (!(new = ft_lstnew(&info, sizeof(t_info))))
-				exit(-1);
-			ft_lstadd(queue, new);
-		}
-	}
-}
-
 char	*ft_nextFolder(char *currFolder, char *nextFolder)
 {
 	char	*res;
@@ -44,25 +21,25 @@ void	del(void *content, size_t content_size)
 void	ft_error(char *dir_name)
 {
 	printf("ls: %s: %s\n", dir_name, strerror(errno));
-	exit(-1);
 }
 
 void	ft_ls(char *dir_name, t_flags *flags)
 {
-	DIR		*dir;
+	char	*nextFoder;
 	t_list	*queue;
 	t_list	*stack;
 	t_info	*info;
-	char	*nextFoder;
+	DIR		*dir;
 
 	stack = NULL;
 	queue = NULL;
 	if (!(dir = opendir(dir_name)))
-		ft_error(dir_name);
+		return ft_error(dir_name);
 	ft_readdir(dir, flags, &stack, &queue);
 	ft_sortfiles(flags, &stack, &queue);
 	ft_printfiles(stack);
 	ft_lstdel(&stack, del);
+	closedir(dir);
 	while ((*flags).R && queue)
 	{
 		info = queue->content;
@@ -72,18 +49,26 @@ void	ft_ls(char *dir_name, t_flags *flags)
 		ft_lstmove(&queue, del);
 		ft_strdel(&nextFoder);
 	}
-	closedir(dir);
 }
 
 int main(int argc, char **argv)
 {
 	t_flags	flags;
+	int		i;
 
-	if (!ft_setflags(argv, &flags))
-		return (0);
-	if (argc == 2 && argv[1][0] != '-')
-		ft_ls(argv[1], &flags);
-	else if (argc == 1)
+	i = ft_setflags(argc, argv, &flags);
+	if (i < argc)
+	{
+		while (i < argc)
+		{
+			printf("%s:\n", argv[i]);
+			ft_ls(argv[i], &flags);
+			if (i + 1 != argc)
+				printf("\n");
+			i++;
+		}
+	}
+	else
 		ft_ls(".", &flags);
 	return (0);
 }

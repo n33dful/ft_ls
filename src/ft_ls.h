@@ -23,12 +23,17 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-typedef struct		s_info
+typedef struct		s_aboutfile
 {
 	char			*full_path;
-	struct dirent	*dirent;
-    struct stat		attrib;
-}					t_info;
+	char			*d_name;
+	__uint8_t		d_type;
+	__darwin_time_t	tv_sec;
+	mode_t			st_mode;
+	nlink_t			st_nlink;
+	uid_t			st_uid;
+	gid_t			st_gid;
+}					t_aboutfile;
 
 typedef struct		s_flags
 {
@@ -63,9 +68,9 @@ size_t				ft_strlen(const char *s);
 int					ft_setflags(int argc, char **argv, t_flags *flags);
 void				ft_ls(char *dir_name, t_flags *flags);
 void				ft_printfiles(t_flags *flags, t_list *files);
-void				ft_readdir(DIR *dir, char *dir_name, t_flags *flags, t_list **files, t_list **queue);
 void				ft_sortfiles(t_flags *flags, t_list **files, t_list **queue);
 char    			*ft_permissions(t_list *file);
-char				*ft_nextFolder(char *currFolder, char *nextFolder);
+char				*ft_fullpath(char *currFolder, char *nextFolder);
+t_list				*ft_readdir(char *dir_name, t_flags *flags);
 
 #endif

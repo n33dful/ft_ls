@@ -1,6 +1,6 @@
 #include "ft_ls.h"
 
-char	*ft_nextFolder(char *currFolder, char *nextFolder)
+char	*ft_fullpath(char *currFolder, char *nextFolder)
 {
 	char	*res;
 	char	*tmp;

@@ -25,7 +25,6 @@ static void		ft_printtime(t_list *file)
 	char		*strtime;
 	t_info		*info;
 	struct stat	lininfo;
-	
 
 	info = file->content;
 	if ((*info).dirent->d_type == 10)

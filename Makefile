@@ -70,10 +70,7 @@ ft_lstsort.c\
 ft_lstmove.c
 FILES=main.c\
 ft_setflags.c\
-ft_sortfiles.c\
-ft_printfiles.c\
 ft_readdir.c\
-ft_permissions.c\
 ft_fullpath.c
 OBJECTS=$(FILES:.c=.o)
 LIBOBJECTS=$(LIBFILES:.c=.o)

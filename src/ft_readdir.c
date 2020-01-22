@@ -1,14 +1,18 @@
 
 #include "ft_ls.h"
 
-void	ft_readdir(DIR *dir, t_flags *flags, t_list **files, t_list **queue)
+void	ft_readdir(DIR *dir, char *dir_name, t_flags *flags, t_list **files, t_list **queue)
 {
 	t_info			info;
 	t_list			*new;
 
 	while ((info.dirent = readdir(dir)) != NULL)
 	{
-    	stat(info.dirent->d_name, &(info.attrib));
+		info.full_path = ft_nextFolder(dir_name, info.dirent->d_name);
+		if (info.dirent->d_type == 8)
+    		lstat(info.full_path, &(info.attrib));
+		else
+			lstat(info.full_path, &(info.attrib));
 		if (info.dirent->d_name[0] == '.' && !(*flags).a)
 			continue ;
 		if (!(new = ft_lstnew(&info, sizeof(t_info))))

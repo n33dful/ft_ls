@@ -7,9 +7,11 @@ static void		ft_printmode(t_list *file)
 	char			*perm;
 
 	info = (t_info *)file->content;
-	perm = ft_permissions(info);
+	perm = ft_permissions(file);
 	if ((*info).dirent->d_type == 4)
 		printf("d");
+	else if ((*info).dirent->d_type == 10)
+		printf("l");
 	else
 		printf("-");
 	printf("%s", perm);
@@ -20,13 +22,24 @@ static void		ft_printmode(t_list *file)
 
 static void		ft_printtime(t_list *file)
 {
-	char	*strtime;
-	t_info	*info;
+	char		*strtime;
+	t_info		*info;
+	struct stat	lininfo;
+	
 
 	info = file->content;
-	strtime = ctime(&((*info).attrib.st_ctimespec.tv_sec));
+	if ((*info).dirent->d_type == 10)
+	{
+		if ((*info).full_path)
+			lstat((*info).full_path, &lininfo);
+		else
+			lstat((*info).dirent->d_name, &lininfo);
+		strtime = ctime(&lininfo.st_mtimespec.tv_sec);
+	}
+	else
+		strtime = ctime(&((*info).attrib.st_ctimespec.tv_sec));
+	printf("%.4s", strtime + 3);
 	printf("%.3s ", strtime + 7);
-	printf("%.3s ", strtime + 4);
 	printf("%.5s ", strtime + 11);
 }
 
@@ -154,7 +167,17 @@ static	void	ft_ell(t_list *files)
 		printf("%*s  ", colwgroup, group->gr_name);
 		printf("%*lld", colwsize, (*info).attrib.st_size);
 		ft_printtime(files);
-		printf("%s\n", (*info).dirent->d_name);
+		if ((*info).dirent->d_type == 10)
+		{
+			char	buf[1024];
+			if ((*info).full_path)
+				readlink((char *)((*info).full_path), buf, 1024);
+			else
+				readlink((char *)((*info).dirent->d_name), buf, 1024);
+			printf("%s -> %s\n", (*info).dirent->d_name, buf);
+		}
+		else
+			printf("%s\n", (*info).dirent->d_name);
 		files = files->next;
 	}
 }

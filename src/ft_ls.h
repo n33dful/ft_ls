@@ -14,6 +14,7 @@
 # include <sys/types.h>
 # include <time.h>
 # include <uuid/uuid.h>
+# include <unistd.h>
 
 typedef struct		s_list
 {
@@ -64,7 +65,7 @@ void				ft_ls(char *dir_name, t_flags *flags);
 void				ft_printfiles(t_flags *flags, t_list *files);
 void				ft_readdir(DIR *dir, char *dir_name, t_flags *flags, t_list **files, t_list **queue);
 void				ft_sortfiles(t_flags *flags, t_list **files, t_list **queue);
-char    			*ft_permissions(t_info	*info);
+char    			*ft_permissions(t_list *file);
 char				*ft_nextFolder(char *currFolder, char *nextFolder);
 
 #endif

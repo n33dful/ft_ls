@@ -8,11 +8,22 @@ void	ft_readdir(DIR *dir, char *dir_name, t_flags *flags, t_list **files, t_list
 
 	while ((info.dirent = readdir(dir)) != NULL)
 	{
-		info.full_path = ft_nextFolder(dir_name, info.dirent->d_name);
-		if (info.dirent->d_type == 8)
-    		lstat(info.full_path, &(info.attrib));
+		if (ft_strcmp(dir_name, "."))
+		{
+			info.full_path = ft_nextFolder(dir_name, info.dirent->d_name);
+			if (info.dirent->d_type == 10)
+				lstat(info.full_path, &(info.attrib));
+			else
+				stat(info.full_path, &(info.attrib));
+		}
 		else
-			lstat(info.full_path, &(info.attrib));
+		{
+			info.full_path = NULL;
+			if (info.dirent->d_type == 10)
+				lstat(info.dirent->d_name, &(info.attrib));
+			else
+				stat(info.dirent->d_name, &(info.attrib));
+		}
 		if (info.dirent->d_name[0] == '.' && !(*flags).a)
 			continue ;
 		if (!(new = ft_lstnew(&info, sizeof(t_info))))

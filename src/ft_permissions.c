@@ -1,33 +1,21 @@
 
 #include "ft_ls.h"
 
-char    *ft_permissions(t_list *file)
+char    *ft_permissions(t_about *about)
 {
-	struct stat	st;
-	char		*modeval;
-	mode_t		perm;
-	t_info		*info;
+	char		*permissions;
 
-	info = (t_info *)file->content;
-    modeval = ft_strnew(9);
-    if ((*info).dirent->d_type == 10 && (*info).full_path)
-        lstat((*info).full_path, &st);
-    else if ((*info).dirent->d_type == 10 && !(*info).full_path)
-        lstat((*info).dirent->d_name, &st);
-    else if ((*info).full_path)
-        stat((*info).full_path, &st);
-    else
-        stat((*info).dirent->d_name, &st);
-    perm = st.st_mode;
-    modeval[0] = (perm & S_IRUSR) ? 'r' : '-';
-    modeval[1] = (perm & S_IWUSR) ? 'w' : '-';
-    modeval[2] = (perm & S_IXUSR) ? 'x' : '-';
-    modeval[3] = (perm & S_IRGRP) ? 'r' : '-';
-    modeval[4] = (perm & S_IWGRP) ? 'w' : '-';
-    modeval[5] = (perm & S_IXGRP) ? 'x' : '-';
-    modeval[6] = (perm & S_IROTH) ? 'r' : '-';
-    modeval[7] = (perm & S_IWOTH) ? 'w' : '-';
-    modeval[8] = (perm & S_IXOTH) ? 'x' : '-';
-    modeval[9] = '\0';
-    return modeval; 
+    if (!(permissions = ft_strnew(9)))
+        return (NULL);
+    permissions[0] = (about->st_mode & S_IRUSR) ? 'r' : '-';
+    permissions[1] = (about->st_mode & S_IWUSR) ? 'w' : '-';
+    permissions[2] = (about->st_mode & S_IXUSR) ? 'x' : '-';
+    permissions[3] = (about->st_mode & S_IRGRP) ? 'r' : '-';
+    permissions[4] = (about->st_mode & S_IWGRP) ? 'w' : '-';
+    permissions[5] = (about->st_mode & S_IXGRP) ? 'x' : '-';
+    permissions[6] = (about->st_mode & S_IROTH) ? 'r' : '-';
+    permissions[7] = (about->st_mode & S_IWOTH) ? 'w' : '-';
+    permissions[8] = (about->st_mode & S_IXOTH) ? 'x' : '-';
+    permissions[9] = '\0';
+    return (permissions);
 }

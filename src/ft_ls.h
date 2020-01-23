@@ -2,19 +2,19 @@
 #ifndef FT_LS_H
 # define FT_LS_H
 
-# include <dirent.h>
 # include <grp.h>
 # include <pwd.h>
+# include <time.h>
 # include <stdio.h>
+# include <dirent.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
+# include <sys/stat.h>
 # include <sys/errno.h>
 # include <sys/ioctl.h>
-# include <sys/stat.h>
 # include <sys/types.h>
-# include <time.h>
 # include <uuid/uuid.h>
-# include <unistd.h>
 
 typedef struct		s_list
 {
@@ -28,12 +28,15 @@ typedef struct		s_aboutfile
 	char			*full_path;
 	char			*d_name;
 	__uint8_t		d_type;
-	__darwin_time_t	tv_sec;
+	__darwin_time_t	c_time;
+	__darwin_time_t	m_time;
 	mode_t			st_mode;
 	nlink_t			st_nlink;
 	uid_t			st_uid;
 	gid_t			st_gid;
-}					t_aboutfile;
+	off_t			st_size;
+	blkcnt_t		st_blocks;
+}					t_about;
 
 typedef struct		s_flags
 {
@@ -61,16 +64,18 @@ void				ft_strdel(char **as);
 void				ft_putstr(char const *s);
 void				ft_putchar(char c);
 size_t				ft_strlen(const char *s);
+char				*ft_strcpy(char *dst, const char *src);
+char				*ft_strdup(const char *s1);
 
 /*
 ** ft_ls functions
 */
 int					ft_setflags(int argc, char **argv, t_flags *flags);
-void				ft_ls(char *dir_name, t_flags *flags);
-void				ft_printfiles(t_flags *flags, t_list *files);
-void				ft_sortfiles(t_flags *flags, t_list **files, t_list **queue);
-char    			*ft_permissions(t_list *file);
+void				ft_ls(char *direct, t_flags *flags);
+t_list				*ft_readdir(char *direct, t_flags *flags);
+void				ft_sortfiles(t_list **files, t_flags *flags);
+void				ft_printfiles(t_list *files, t_flags *flags);
+char    			*ft_permissions(t_about *about);
 char				*ft_fullpath(char *currFolder, char *nextFolder);
-t_list				*ft_readdir(char *dir_name, t_flags *flags);
 
 #endif

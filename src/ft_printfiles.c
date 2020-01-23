@@ -1,45 +1,36 @@
 
 #include "ft_ls.h"
 
-static void		ft_printmode(t_list *file)
+static void		ft_ellmode(t_about *about)
 {
-	t_info			*info;
-	char			*perm;
-
-	info = (t_info *)file->content;
-	perm = ft_permissions(file);
-	if ((*info).dirent->d_type == 4)
+	if (about->d_type == 4)
 		printf("d");
-	else if ((*info).dirent->d_type == 10)
+	else if (about->d_type == 10)
 		printf("l");
 	else
 		printf("-");
-	printf("%s", perm);
+    printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
+    printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
+    printf("%c", (about->st_mode & S_IXUSR) ? 'x' : '-');
+    printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
+    printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
+    printf("%c", (about->st_mode & S_IXGRP) ? 'x' : '-');
+    printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
+    printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
+    printf("%c", (about->st_mode & S_IXOTH) ? 'x' : '-');
 	printf(" ");
 	printf(" ");
-	ft_strdel(&perm);
 }
 
-static void		ft_printtime(t_list *file)
+static void		ft_elltime(t_about *about)
 {
 	char		*strtime;
-	t_info		*info;
-	struct stat	lininfo;
 
-	info = file->content;
-	if ((*info).dirent->d_type == 10)
-	{
-		if ((*info).full_path)
-			lstat((*info).full_path, &lininfo);
-		else
-			lstat((*info).dirent->d_name, &lininfo);
-		strtime = ctime(&lininfo.st_mtimespec.tv_sec);
-	}
-	else
-		strtime = ctime(&((*info).attrib.st_ctimespec.tv_sec));
-	printf("%.4s", strtime + 3);
-	printf("%.3s ", strtime + 7);
-	printf("%.5s ", strtime + 11);
+	strtime = ctime(&(about->c_time));
+	printf("%.4s", strtime + 4);
+	printf("%.3s", strtime + 8);
+	printf("%.5s", strtime + 11);
+	printf(" ");
 }
 
 static	int	ft_numlen(int n)
@@ -59,15 +50,15 @@ static	int	ft_numlen(int n)
 
 static int	ft_findcolwlinks(t_list *files)
 {
-	t_info	*info;
-	int	colw;
+	t_about	*about;
+	int		colw;
 
 	colw = 0;
 	while (files)
 	{
-		info = (t_info *)files->content;
-		if ((*info).attrib.st_nlink > colw)
-			colw = (*info).attrib.st_nlink;
+		about = files->content;
+		if (about->st_nlink > colw)
+			colw = about->st_nlink;
 		files = files->next;
 	}
 	return (ft_numlen(colw));
@@ -75,17 +66,25 @@ static int	ft_findcolwlinks(t_list *files)
 
 static int		ft_findcolwuser(t_list *files)
 {
-	t_info			*info;
+	t_about			*about;
 	struct passwd	*passwd;
 	int				colw;
 
 	colw = 0;
 	while (files)
 	{
-		info = (t_info *)files->content;
-		passwd = getpwuid((*info).attrib.st_uid);
-		if ((int)ft_strlen(passwd->pw_name) > colw)
-			colw = ft_strlen(passwd->pw_name);
+		about = files->content;
+		passwd = getpwuid(about->st_uid);
+		if (passwd->pw_name)
+		{
+			if ((int)ft_strlen(passwd->pw_name) > colw)
+				colw = ft_strlen(passwd->pw_name);
+		}
+		else
+		{
+			if (ft_numlen(about->st_uid) > colw)
+				colw = ft_numlen(about->st_uid);
+		}
 		files = files->next;
 	}
 	return (colw + 1);
@@ -93,17 +92,25 @@ static int		ft_findcolwuser(t_list *files)
 
 static int		ft_findcolwgroup(t_list *files)
 {
-	t_info			*info;
+	t_about			*about;
 	struct group	*group;
 	int				colw;
 
 	colw = 0;
 	while (files)
 	{
-		info = (t_info *)files->content;
-		group = getgrgid((*info).attrib.st_gid);
-		if ((int)ft_strlen(group->gr_name) > colw)
-			colw = ft_strlen(group->gr_name);
+		about = files->content;
+		group = getgrgid(about->st_gid);
+		if (group->gr_name)
+		{
+			if ((int)ft_strlen(group->gr_name) > colw)
+				colw = ft_strlen(group->gr_name);
+		}
+		else
+		{
+			if (ft_numlen(about->st_gid) > colw)
+				colw = ft_numlen(about->st_gid);
+		}
 		files = files->next;
 	}
 	return (colw + 1);
@@ -111,123 +118,116 @@ static int		ft_findcolwgroup(t_list *files)
 
 static int	ft_findcolwsize(t_list *files)
 {
-	t_info	*info;
-	int	colw;
+	t_about	*about;
+	int		colw;
 
 	colw = 0;
 	while (files)
 	{
-		info = (t_info *)files->content;
-		if ((*info).attrib.st_size > colw)
-			colw = (*info).attrib.st_size;
+		about = files->content;
+		if (about->st_size > colw)
+			colw = about->st_size;
 		files = files->next;
 	}
 	return (ft_numlen(colw));
 }
 
-static int		ft_total(t_list *files)
+static blkcnt_t	ft_elltotal(t_list *files)
 {
-	t_info	*info;
-	int	total;
+	t_about		*about;
+	blkcnt_t	total;
 
 	total = 0;
 	while (files)
 	{
-		info = (t_info *)files->content;
-		total += (*info).attrib.st_blocks;
+		about = files->content;
+		total += about->st_blocks;
 		files = files->next;
 	}
 	return (total);
 }
 
+static void		ft_ellname(t_about *about)
+{
+	char	buf[1024];
+
+	if (about->d_type == 10)
+	{
+		if (!(readlink(about->full_path ? \
+about->full_path : about->d_name, buf, 1024)))
+			printf("%s -> (null)", about->d_name);
+		else
+			printf("%s -> %s", about->d_name, buf);
+	}
+	else
+		printf("%s", about->d_name);
+}
+
+static void		ft_elluser(int width, uid_t uid)
+{
+	struct passwd *pass;
+
+	pass = getpwuid(uid);
+	if (pass->pw_name)
+		printf("%-*s", width, pass->pw_name);
+	else
+		printf("%-*d", width, uid);
+	printf(" ");
+}
+
+static void		ft_ellgroup(int width, gid_t gid)
+{
+	struct group *gr;
+
+	gr = getgrgid(gid);
+	if (gr->gr_name)
+		printf("%-*s", width, gr->gr_name);
+	else
+		printf("%-*d", width, gid);
+	printf(" ");
+}
+
 static	void	ft_ell(t_list *files)
 {
-	t_info			*info;
-	struct group	*group;
-	struct passwd	*passwd;
-	int				colwlinks;
-	int				colwuser;
-	int				colwgroup;
-	int				colwsize;
+	t_about			*about;
+	int				uwidth;
+	int				gwidth;
+	int				lwidth;
+	int				swidth;
 
-	colwsize = ft_findcolwsize(files);
-	colwgroup = ft_findcolwgroup(files);
-	colwlinks = ft_findcolwlinks(files);
-	colwuser = ft_findcolwuser(files);
-	printf("total %d\n", ft_total(files));
+	swidth = ft_findcolwsize(files);
+	lwidth = ft_findcolwlinks(files);
+	uwidth = ft_findcolwuser(files);
+	gwidth = ft_findcolwgroup(files);
+	printf("total %lld\n", ft_elltotal(files));
 	while (files)
 	{
-		info = (t_info *)files->content;
-		passwd = getpwuid((*info).attrib.st_uid);
-		group = getgrgid((*info).attrib.st_gid);
-		ft_printmode(files);
-		printf("%*d ", colwlinks, (*info).attrib.st_nlink);
-		printf("%-*s", colwuser, passwd->pw_name);
-		printf("%*s  ", colwgroup, group->gr_name);
-		printf("%*lld", colwsize, (*info).attrib.st_size);
-		ft_printtime(files);
-		if ((*info).dirent->d_type == 10)
-		{
-			char	buf[1024];
-			if ((*info).full_path)
-				readlink((char *)((*info).full_path), buf, 1024);
-			else
-				readlink((char *)((*info).dirent->d_name), buf, 1024);
-			printf("%s -> %s\n", (*info).dirent->d_name, buf);
-		}
-		else
-			printf("%s\n", (*info).dirent->d_name);
+		about = files->content;
+		ft_ellmode(about);
+		printf("%*d ", lwidth, about->st_nlink);
+		ft_elluser(uwidth, about->st_uid);
+		ft_ellgroup(gwidth, about->st_gid);
+		printf("%*lld ", swidth, about->st_size);
+		ft_elltime(about);
+		ft_ellname(about);
+		printf("\n");
 		files = files->next;
 	}
 }
 
-//unsigned short	ft_find_col_w(t_list *files)
-//{
-//	unsigned short	col_w;
-//	unsigned short	tmp;
-//	t_info			*info;
-//
-//	col_w = 0;
-//	while (files)
-//	{
-//		info = (t_info *)files->content;
-//		tmp = (*info).dirent->d_namlen;
-//		if (tmp > col_w)
-//			col_w = tmp;
-//		files = files->next;
-//	}
-//	return (col_w / 8 * 8 + 8);
-//}
-
-void	ft_printfiles(t_flags *flags, t_list *files)
+void	ft_printfiles(t_list *files, t_flags *flags)
 {
-    //struct winsize	w;
-	t_info			*info;
-	//unsigned short	i;
-	//unsigned short	columns;
-	//unsigned short	col_w;
+	t_about			*about;
 
-	//i = 0;
-    //ioctl(0, TIOCGWINSZ, &w);
-	//col_w = ft_find_col_w(files);
-	//columns = w.ws_col / col_w;
-	//if (columns == 0)
-	//	columns = 1;
-	if ((*flags).l)
+	if (flags->l)
 		ft_ell(files);
 	else
-	{
+	{	
 		while(files)
 		{
-			info = (t_info *)files->content;
-			//printf("%-*s", col_w, (*info).dirent->d_name);
-			printf("%s\n", (*info).dirent->d_name);
-			//if (((i + 1) % columns) == 0)
-			//	printf("\n");
+			about = files->content;
+			printf("%s\n", about->d_name);
 			files = files->next;
-		//	i++;
 		}
 	}
-	//if ((i % columns) != 0)
-	//	printf("\n");
 }

@@ -36,9 +36,10 @@ static int	ft_setdirent(struct dirent *dirent, t_about *about)
 	return (1);
 }
 
-static void	*ft_error(t_list **files)
+static void	*ft_error(t_list **files, DIR *dir)
 {
 	ft_lstdel(files, del);
+	closedir(dir);
 	return (NULL);
 }
 
@@ -69,6 +70,34 @@ about->full_path : dirent->d_name, &st)) != 0)
 	return (1);
 }
 
+static t_list	*ft_singlefile(char *filename)
+{
+	t_about		about;
+	t_list		*file;
+	struct stat	st;
+
+	if (stat(filename, &st) == 0)
+		about.d_type = 0;
+	else if (lstat(filename, &st) == 0)
+		about.d_type = 4;
+	else
+		return (NULL);
+	if (!(about.d_name = ft_strdup(filename)))
+		return (NULL);
+	about.full_path = NULL;
+	about.st_gid = st.st_gid;
+	about.st_mode = st.st_mode;
+	about.st_nlink = st.st_nlink;
+	about.st_uid = st.st_uid;
+	about.c_time = st.st_ctimespec.tv_sec;
+	about.m_time = st.st_mtimespec.tv_sec;
+	about.st_size = st.st_size;
+	about.st_blocks = st.st_blocks;
+	if (!(file = ft_lstnew(&about, sizeof(t_about))))
+		return (NULL);
+	return (file);
+}
+
 t_list		*ft_readdir(char *direct, t_flags *flags)
 {
 	DIR				*dir;
@@ -79,19 +108,19 @@ t_list		*ft_readdir(char *direct, t_flags *flags)
 
 	files = NULL;
 	if (!(dir = opendir(direct)))
-		return (NULL);
+		return (ft_singlefile(direct));
 	while ((dirent = readdir(dir)) != NULL)
 	{
 		if (dirent->d_name[0] == '.' && !flags->a)
 			continue ;
 		if (!ft_setfullpath(dirent, direct, &about))
-			return (ft_error(&files));
+			return (ft_error(&files, dir));
 		if (!ft_setdirent(dirent, &about))
-			return (ft_error(&files));
+			return (ft_error(&files, dir));
 		if (!ft_setstat(dirent, &about))
-			return (ft_error(&files));
+			return (ft_error(&files, dir));
 		if (!(new = ft_lstnew(&about, sizeof(t_about))))
-			return (ft_error(&files));
+			return (ft_error(&files, dir));
 		ft_lstadd(&files, new);
 	}
 	closedir(dir);

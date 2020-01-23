@@ -44,12 +44,8 @@ ft_strcmp(about->d_name, ".") && ft_strcmp(about->d_name, ".."))
 void	ft_ls(char *direct, t_flags *flags)
 {
 	t_list	*files;
-	//DIR		*dir;
 
-	//if (!(dir = opendir(direct)))
-	//	return (ft_error(direct));
-	//closedir(dir);
-	if (!(files = ft_readdir(direct, flags)))
+	if (!(files = ft_readdir(direct, flags)) && errno)
 		return (ft_error(direct));
 	ft_sortfiles(&files, flags);
 	ft_printfiles(files, flags);
@@ -65,12 +61,13 @@ int main(int argc, char **argv)
 
 	if ((i = ft_setflags(argc, argv, &flags)) < 0)
 		return (1);
-	if (i < argc)
+	if (i + 1 == argc)
+		ft_ls(argv[i], &flags);
+	else if (i < argc)
 	{
 		while (i < argc)
 		{
-			if (i + 1 != argc)
-				printf("%s:\n", argv[i]);
+			printf("%s:\n", argv[i]);
 			ft_ls(argv[i], &flags);
 			if (i + 1 != argc)
 				printf("\n");

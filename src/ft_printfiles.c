@@ -9,15 +9,15 @@ static void		ft_ellmode(t_about *about)
 		printf("l");
 	else
 		printf("-");
-    printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
-    printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
-    printf("%c", (about->st_mode & S_IXUSR) ? 'x' : '-');
-    printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
-    printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
-    printf("%c", (about->st_mode & S_IXGRP) ? 'x' : '-');
-    printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
-    printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
-    printf("%c", (about->st_mode & S_IXOTH) ? 'x' : '-');
+	printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
+	printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
+	printf("%c", (about->st_mode & S_IXUSR) ? 'x' : '-');
+	printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
+	printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
+	printf("%c", (about->st_mode & S_IXGRP) ? 'x' : '-');
+	printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
+	printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
+	printf("%c", (about->st_mode & S_IXOTH) ? 'x' : '-');
 	printf(" ");
 	printf(" ");
 }
@@ -26,10 +26,20 @@ static void		ft_elltime(t_about *about)
 {
 	char		*strtime;
 
-	strtime = ctime(&(about->c_time));
-	printf("%.4s", strtime + 4);
-	printf("%.3s", strtime + 8);
-	printf("%.5s", strtime + 11);
+	if (time(NULL) - about->m_time > 15811200)
+	{
+		strtime = ctime(&(about->m_time));
+		printf("%.4s", strtime + 4);
+		printf("%.3s", strtime + 8);
+		printf("%5.4s", strtime + 20);
+	}
+	else
+	{
+		strtime = ctime(&(about->c_time));
+		printf("%.4s", strtime + 4);
+		printf("%.3s", strtime + 8);
+		printf("%.5s", strtime + 11);
+	}
 	printf(" ");
 }
 
@@ -199,7 +209,8 @@ static	void	ft_ell(t_list *files)
 	lwidth = ft_findcolwlinks(files);
 	uwidth = ft_findcolwuser(files);
 	gwidth = ft_findcolwgroup(files);
-	printf("total %lld\n", ft_elltotal(files));
+	if (ft_lstlen(files) > 1)
+		printf("total %lld\n", ft_elltotal(files));
 	while (files)
 	{
 		about = files->content;
@@ -222,8 +233,8 @@ void	ft_printfiles(t_list *files, t_flags *flags)
 	if (flags->l)
 		ft_ell(files);
 	else
-	{	
-		while(files)
+	{
+		while (files)
 		{
 			about = files->content;
 			printf("%s\n", about->d_name);

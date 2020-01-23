@@ -66,6 +66,8 @@ void				ft_putchar(char c);
 size_t				ft_strlen(const char *s);
 char				*ft_strcpy(char *dst, const char *src);
 char				*ft_strdup(const char *s1);
+size_t				ft_lstlen(t_list *list);
+void				ft_putendl_fd(char const *s, int fd);
 
 /*
 ** ft_ls functions

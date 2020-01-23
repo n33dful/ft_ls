@@ -1,7 +1,7 @@
 
 #include "ft_ls.h"
 
-static int	sortByNameAsc(t_list *current, t_list *next)
+static int	by_name_asc(t_list *current, t_list *next)
 {
 	t_about	*first;
 	t_about	*second;
@@ -13,7 +13,7 @@ static int	sortByNameAsc(t_list *current, t_list *next)
 	return (0);
 }
 
-static int	sortByNameDesc(t_list *current, t_list *next)
+static int	by_name_desc(t_list *current, t_list *next)
 {
 	t_about	*first;
 	t_about	*second;
@@ -25,7 +25,7 @@ static int	sortByNameDesc(t_list *current, t_list *next)
 	return (0);
 }
 
-static int	sortByTimeAsc(t_list *current, t_list *next)
+static int	by_time_asc(t_list *current, t_list *next)
 {
 	t_about	*first;
 	t_about	*second;
@@ -35,11 +35,11 @@ static int	sortByTimeAsc(t_list *current, t_list *next)
 	if (first->m_time < second->m_time)
 		return (1);
 	if (first->m_time == second->m_time)
-		return (sortByNameDesc(current, next));
+		return (by_name_asc(current, next));
 	return (0);
 }
 
-static int	sortByTimeDesc(t_list *current, t_list *next)
+static int	by_time_desc(t_list *current, t_list *next)
 {
 	t_about	*first;
 	t_about	*second;
@@ -49,18 +49,18 @@ static int	sortByTimeDesc(t_list *current, t_list *next)
 	if (first->m_time > second->m_time)
 		return (1);
 	if (first->m_time == second->m_time)
-		return (sortByNameAsc(current, next));
+		return (by_name_desc(current, next));
 	return (0);
 }
 
 void		ft_sortfiles(t_list **files, t_flags *flags)
 {
 	if (flags->r && !flags->t)
-		ft_lstsort(files, sortByNameDesc);
+		ft_lstsort(files, by_name_desc);
 	else if (!flags->r && flags->t)
-		ft_lstsort(files, sortByTimeAsc);
+		ft_lstsort(files, by_time_asc);
 	else if (flags->r && flags->t)
-		ft_lstsort(files, sortByTimeDesc);
+		ft_lstsort(files, by_time_desc);
 	else
-		ft_lstsort(files, sortByNameAsc);
+		ft_lstsort(files, by_name_asc);
 }

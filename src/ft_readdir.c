@@ -1,21 +1,6 @@
 
 #include "ft_ls.h"
 
-static void	del(void *content, size_t content_size)
-{
-	t_about	*about;
-
-	about = NULL;
-	if (content_size > 0)
-	{
-		about = content;
-		ft_strdel(&(about->full_path));
-		ft_strdel(&(about->d_name));
-		ft_memdel(&content);
-		about = NULL;
-	}
-}
-
 static int	ft_setfullpath(struct dirent *dirent, char *direct, t_about *about)
 {
 	if (ft_strcmp(direct, "."))
@@ -34,13 +19,6 @@ static int	ft_setdirent(struct dirent *dirent, t_about *about)
 		return (0);
 	about->d_type = dirent->d_type;
 	return (1);
-}
-
-static void	*ft_error(t_list **files, DIR *dir)
-{
-	ft_lstdel(files, del);
-	closedir(dir);
-	return (NULL);
 }
 
 static int	ft_setstat(struct dirent *dirent, t_about *about)
@@ -111,16 +89,16 @@ t_list		*ft_readdir(char *direct, t_flags *flags)
 		return (ft_singlefile(direct));
 	while ((dirent = readdir(dir)) != NULL)
 	{
-		if (dirent->d_name[0] == '.' && !flags->a)
+		if (dirent->d_name[0] == '.' && !flags->all)
 			continue ;
 		if (!ft_setfullpath(dirent, direct, &about))
-			return (ft_error(&files, dir));
+			return (ft_memerror(&files, dir));
 		if (!ft_setdirent(dirent, &about))
-			return (ft_error(&files, dir));
+			return (ft_memerror(&files, dir));
 		if (!ft_setstat(dirent, &about))
-			return (ft_error(&files, dir));
+			return (ft_memerror(&files, dir));
 		if (!(new = ft_lstnew(&about, sizeof(t_about))))
-			return (ft_error(&files, dir));
+			return (ft_memerror(&files, dir));
 		ft_lstadd(&files, new);
 	}
 	closedir(dir);

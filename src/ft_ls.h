@@ -10,10 +10,12 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/acl.h>
 # include <sys/stat.h>
 # include <sys/errno.h>
 # include <sys/ioctl.h>
 # include <sys/types.h>
+# include <sys/xattr.h>
 # include <uuid/uuid.h>
 
 typedef struct		s_list
@@ -40,44 +42,65 @@ typedef struct		s_aboutfile
 
 typedef struct		s_flags
 {
-	int				l;
-	int				R;
-	int				a;
-	int				r;
-	int				t;
+	int				ell;
+	int				recursively;
+	int				all;
+	int				reverse;
+	int				time;
+	int				size;
 }					t_flags;
 
 /*
 ** libft functions
 */
-char				*ft_strchr(const char *s, int c);
+void				ft_lstsort(t_list **list, int (*func)(t_list *, t_list *));
+t_list				*ft_lstnew(void const *content, size_t content_size);
+void				ft_lstmove(t_list **alst, void (*del)(void *, size_t));
+void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strcmp(const char *s1, const char *s2);
-t_list				*ft_lstnew(void const *content, size_t content_size);
-void				ft_lstadd(t_list **alst, t_list *new);
-void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstmove(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstsort(t_list **list, int (*func)(t_list *, t_list *));
-void				ft_memdel(void **ap);
-char				*ft_strnew(size_t size);
-void				ft_strdel(char **as);
-void				ft_putstr(char const *s);
-void				ft_putchar(char c);
-size_t				ft_strlen(const char *s);
 char				*ft_strcpy(char *dst, const char *src);
+void				ft_lstadd(t_list **alst, t_list *new);
+void				ft_putendl_fd(char const *s, int fd);
+char				*ft_strchr(const char *s, int c);
+size_t				ft_strlen(const char *s);
 char				*ft_strdup(const char *s1);
 size_t				ft_lstlen(t_list *list);
-void				ft_putendl_fd(char const *s, int fd);
+void				ft_putstr(char const *s);
+char				*ft_strnew(size_t size);
+void				ft_memdel(void **ap);
+void				ft_strdel(char **as);
+void				ft_putchar(char c);
+
+/*
+** Sort functions
+*/
+int					by_name_asc(t_list *current, t_list *next);
+int					by_time_asc(t_list *current, t_list *next);
+int					by_size_asc(t_list *current, t_list *next);
+int					by_name_desc(t_list *current, t_list *next);
+int					by_time_desc(t_list *current, t_list *next);
+int					by_size_desc(t_list *current, t_list *next);
 
 /*
 ** ft_ls functions
 */
-int					ft_setflags(int argc, char **argv, t_flags *flags);
+int					ft_numlen(long long n);
+void				ft_ellmode(t_about *about);
+void				ft_elltime(t_about *about);
+void				ft_ellname(t_about *about);
+void				ft_longformat(t_list *files);
+blkcnt_t			ft_elltotal(t_list *files);
+void				ft_elluser(int width, uid_t uid);
+void				ft_ellgroup(int width, gid_t gid);
+char    			*ft_permissions(t_about *about);
 void				ft_ls(char *direct, t_flags *flags);
+void				*ft_memerror(t_list **files, DIR *dir);
+void				del(void *content, size_t content_size);
 t_list				*ft_readdir(char *direct, t_flags *flags);
 void				ft_sortfiles(t_list **files, t_flags *flags);
 void				ft_printfiles(t_list *files, t_flags *flags);
-char    			*ft_permissions(t_about *about);
 char				*ft_fullpath(char *currFolder, char *nextFolder);
+int					ft_setflags(int argc, char **argv, t_flags *flags);
 
 #endif

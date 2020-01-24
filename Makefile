@@ -73,7 +73,21 @@ ft_setflags.c\
 ft_readdir.c\
 ft_sortfiles.c\
 ft_printfiles.c\
-ft_fullpath.c
+ft_fullpath.c\
+ft_memerror.c\
+del.c\
+ft_numlen.c\
+sort_by_name.c\
+sort_by_time.c\
+sort_by_size.c\
+ft_longformat.c\
+ft_elltotal.c\
+ft_ellgroup.c\
+ft_elluser.c\
+ft_elltime.c\
+ft_ellname.c\
+ft_ellmode.c\
+ft_ls.c
 OBJECTS=$(FILES:.c=.o)
 LIBOBJECTS=$(LIBFILES:.c=.o)
 OBJSDIR=$(addprefix src/, $(OBJECTS))

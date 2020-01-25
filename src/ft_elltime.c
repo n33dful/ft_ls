@@ -8,16 +8,16 @@ void	ft_elltime(t_about *about)
 	if (time(NULL) - about->m_time > 15811200)
 	{
 		strtime = ctime(&(about->m_time));
-		printf("%.4s", strtime + 4);
-		printf("%.3s", strtime + 8);
-		printf("%5.4s", strtime + 20);
+		ft_printf("%.4s", strtime + 4);
+		ft_printf("%.3s", strtime + 8);
+		ft_printf("%5.4s", strtime + 20);
 	}
 	else
 	{
-		strtime = ctime(&(about->c_time));
-		printf("%.4s", strtime + 4);
-		printf("%.3s", strtime + 8);
-		printf("%.5s", strtime + 11);
+		strtime = ctime(&(about->m_time));
+		ft_printf("%.4s", strtime + 4);
+		ft_printf("%.3s", strtime + 8);
+		ft_printf("%.5s", strtime + 11);
 	}
-	printf(" ");
+	ft_printf(" ");
 }

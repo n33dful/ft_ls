@@ -85,16 +85,16 @@ OBJS=$(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS) $(HEADER)
-	ar rcs $(NAME) $(OBJS)
-	ranlib $(NAME)
+	@ar rcs $(NAME) $(OBJS)
+	@ranlib $(NAME)
 
 .c.o:
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all

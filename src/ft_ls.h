@@ -2,6 +2,10 @@
 #ifndef FT_LS_H
 # define FT_LS_H
 
+/*
+** -------------------------- External Headers ---------------------------------
+*/
+
 # include <grp.h>
 # include <pwd.h>
 # include <time.h>
@@ -17,6 +21,23 @@
 # include <sys/types.h>
 # include <sys/xattr.h>
 # include <uuid/uuid.h>
+# include <sys/ttycom.h>
+
+/*
+** -------------------------- Colors Definition --------------------------------
+*/
+
+# define PF_RED			"\033[31m"
+# define PF_GREEN		"\033[32m"
+# define PF_YELLOW		"\033[33m"
+# define PF_BLUE		"\033[34m"
+# define PF_PURPLE		"\033[35m"
+# define PF_CYAN		"\033[36m"
+# define PF_EOC			"\033[0m"
+
+/*
+** ------------------------- Structure Definition ------------------------------
+*/
 
 typedef struct		s_list
 {
@@ -29,7 +50,7 @@ typedef struct		s_aboutfile
 {
 	char			*full_path;
 	char			*d_name;
-	__uint8_t		d_type;
+	unsigned char	d_type;
 	__darwin_time_t	c_time;
 	__darwin_time_t	m_time;
 	mode_t			st_mode;
@@ -48,10 +69,29 @@ typedef struct		s_flags
 	int				reverse;
 	int				time;
 	int				size;
+	int				single;
+	int				color;
 }					t_flags;
 
+typedef struct		s_all
+{
+	t_list			*errors;
+	t_list			*singles;
+	t_list			*dirs;
+}					t_all;
+
+
 /*
-** libft functions
+** -----------------------------------------------------------------------------
+** -------------------------------- Sources ------------------------------------
+** -----------------------------------------------------------------------------
+*/
+
+int					ft_printf(const char *format, ...);
+void				ft_ls(char *direct, t_flags *flags);
+
+/*
+** ------------------------------ Libft Functions ------------------------------
 */
 void				ft_lstsort(t_list **list, int (*func)(t_list *, t_list *));
 t_list				*ft_lstnew(void const *content, size_t content_size);
@@ -73,7 +113,7 @@ void				ft_strdel(char **as);
 void				ft_putchar(char c);
 
 /*
-** Sort functions
+** ------------------------------ Sort Functions -------------------------------
 */
 int					by_name_asc(t_list *current, t_list *next);
 int					by_time_asc(t_list *current, t_list *next);
@@ -83,18 +123,17 @@ int					by_time_desc(t_list *current, t_list *next);
 int					by_size_desc(t_list *current, t_list *next);
 
 /*
-** ft_ls functions
+** ----------------------------- ft_ls Functions -------------------------------
 */
 int					ft_numlen(long long n);
 void				ft_ellmode(t_about *about);
 void				ft_elltime(t_about *about);
-void				ft_ellname(t_about *about);
-void				ft_longformat(t_list *files);
+void				ft_ellname(t_about *about, t_flags *flags);
+void				ft_longformat(t_list *files, t_flags *flags);
 blkcnt_t			ft_elltotal(t_list *files);
 void				ft_elluser(int width, uid_t uid);
 void				ft_ellgroup(int width, gid_t gid);
 char    			*ft_permissions(t_about *about);
-void				ft_ls(char *direct, t_flags *flags);
 void				*ft_memerror(t_list **files, DIR *dir);
 void				del(void *content, size_t content_size);
 t_list				*ft_readdir(char *direct, t_flags *flags);

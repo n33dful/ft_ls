@@ -85,7 +85,7 @@ static int	ft_findcolwsize(t_list *files)
 	return (ft_numlen(colw));
 }
 
-void		ft_longformat(t_list *files)
+void		ft_longformat(t_list *files, t_flags *flags)
 {
 	t_about			*about;
 	int				uwidth;
@@ -97,19 +97,19 @@ void		ft_longformat(t_list *files)
 	lwidth = ft_findcolwlinks(files);
 	uwidth = ft_findcolwuser(files);
 	gwidth = ft_findcolwgroup(files);
-	if (ft_lstlen(files) > 1)
-		printf("total %lld\n", ft_elltotal(files));
+	if (ft_lstlen(files) > 1 && !flags->single)
+		ft_printf("total %lld\n", ft_elltotal(files));
 	while (files)
 	{
 		about = files->content;
 		ft_ellmode(about);
-		printf("%*d ", lwidth, about->st_nlink);
+		ft_printf("%*d", lwidth, about->st_nlink);
 		ft_elluser(uwidth, about->st_uid);
 		ft_ellgroup(gwidth, about->st_gid);
-		printf("%*lld ", swidth, about->st_size);
+		ft_printf(" %*lld ", swidth, about->st_size);
 		ft_elltime(about);
-		ft_ellname(about);
-		printf("\n");
+		ft_ellname(about, flags);
+		ft_printf("\n");
 		files = files->next;
 	}
 }

@@ -9,11 +9,11 @@ static void	ft_recursively(char *direct, t_flags *flags, t_list *files)
 	while (files)
 	{
 		about = files->content;
-		if (about->d_type == 4 && \
+		if ((about->st_mode & S_IFDIR) == 0040000 && \
 ft_strcmp(about->d_name, ".") && ft_strcmp(about->d_name, ".."))
 		{
 			nextdirect = ft_fullpath(direct, about->d_name);
-			printf("\n%s:\n", nextdirect);
+			ft_printf("\n%s:\n", nextdirect);
 			ft_ls(nextdirect, flags);
 			ft_strdel(&nextdirect);
 		}
@@ -23,7 +23,7 @@ ft_strcmp(about->d_name, ".") && ft_strcmp(about->d_name, ".."))
 
 static void	ft_error(char *direct)
 {
-	printf("ls: %s: %s\n", direct, strerror(errno));
+	ft_printf("ls: %s: %s\n", direct, strerror(errno));
 }
 
 void		ft_ls(char *direct, t_flags *flags)

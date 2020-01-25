@@ -6,7 +6,6 @@ static void	ft_printacl(t_about *about)
     acl_t		acl;
     acl_entry_t	dummy;
     ssize_t		xattr;
-    char		chr;
     char		*filename;
 
 	filename = about->full_path ? about->full_path : about->d_name;
@@ -20,31 +19,30 @@ static void	ft_printacl(t_about *about)
     if (xattr < 0)
         xattr = 0;
     if (xattr > 0)
-        chr = '@';
+        ft_putchar('@');
     else if (acl != NULL)
-        chr = '+';
+        ft_putchar('+');
     else
-        chr = ' ';
-    printf("%c", chr);
+        ft_putchar(' ');
 }
 
 void        ft_ellmode(t_about *about)
 {
-	if (about->d_type == 4)
-		printf("d");
-	else if (about->d_type == 10)
-		printf("ell");
-	else
-		printf("-");
-	printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
-	printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
-	printf("%c", (about->st_mode & S_IXUSR) ? 'x' : '-');
-	printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
-	printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
-	printf("%c", (about->st_mode & S_IXGRP) ? 'x' : '-');
-	printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
-	printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
-	printf("%c", (about->st_mode & S_IXOTH) ? 'x' : '-');
+	if ((about->st_mode & S_IFDIR) == 0040000)
+		ft_putchar('d');
+	else if ((about->st_mode & S_IFLNK) == 0120000)
+		ft_putchar('l');
+    else
+		ft_putchar('-');
+	ft_putchar((about->st_mode & S_IRUSR) ? 'r' : '-');
+	ft_putchar((about->st_mode & S_IWUSR) ? 'w' : '-');
+	ft_putchar((about->st_mode & S_IXUSR) ? 'x' : '-');
+	ft_putchar((about->st_mode & S_IRGRP) ? 'r' : '-');
+	ft_putchar((about->st_mode & S_IWGRP) ? 'w' : '-');
+	ft_putchar((about->st_mode & S_IXGRP) ? 'x' : '-');
+	ft_putchar((about->st_mode & S_IROTH) ? 'r' : '-');
+	ft_putchar((about->st_mode & S_IWOTH) ? 'w' : '-');
+	ft_putchar((about->st_mode & S_IXOTH) ? 'x' : '-');
 	ft_printacl(about);
-	printf(" ");
+	ft_putchar(' ');
 }

@@ -7,8 +7,8 @@ void	ft_ellgroup(int width, gid_t gid)
 
 	gr = getgrgid(gid);
 	if (gr->gr_name)
-		printf("%-*s", width, gr->gr_name);
+		ft_printf("%-*s", width, gr->gr_name);
 	else
-		printf("%-*d", width, gid);
-	printf(" ");
+		ft_printf("%-*d", width, gid);
+	ft_printf(" ");
 }

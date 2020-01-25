@@ -12,6 +12,8 @@ int	ft_setflags(int argc, char **argv, t_flags *flags)
 	flags->reverse = 0;
 	flags->time = 0;
 	flags->size = 0;
+	flags->single = 0;
+	flags->color = 0;
 	while (i < argc)
 	{
 		if (!ft_strcmp(argv[i], "--"))
@@ -30,6 +32,8 @@ int	ft_setflags(int argc, char **argv, t_flags *flags)
 			flags->time = 1;
 		if (ft_strchr(argv[i], 'S'))
 			flags->size = 1;
+		if (ft_strchr(argv[i], 'G'))
+			flags->color = 1;
 		i++;
 	}
 	return (i);

@@ -19,30 +19,30 @@ static void	ft_printacl(t_about *about)
     if (xattr < 0)
         xattr = 0;
     if (xattr > 0)
-        ft_putchar('@');
+        ft_printf("@");
     else if (acl != NULL)
-        ft_putchar('+');
+        ft_printf("+");
     else
-        ft_putchar(' ');
+        ft_printf(" ");
 }
 
 void        ft_ellmode(t_about *about)
 {
 	if ((about->st_mode & S_IFDIR) == 0040000)
-		ft_putchar('d');
+		ft_printf("d");
 	else if ((about->st_mode & S_IFLNK) == 0120000)
-		ft_putchar('l');
+		ft_printf("l");
     else
-		ft_putchar('-');
-	ft_putchar((about->st_mode & S_IRUSR) ? 'r' : '-');
-	ft_putchar((about->st_mode & S_IWUSR) ? 'w' : '-');
-	ft_putchar((about->st_mode & S_IXUSR) ? 'x' : '-');
-	ft_putchar((about->st_mode & S_IRGRP) ? 'r' : '-');
-	ft_putchar((about->st_mode & S_IWGRP) ? 'w' : '-');
-	ft_putchar((about->st_mode & S_IXGRP) ? 'x' : '-');
-	ft_putchar((about->st_mode & S_IROTH) ? 'r' : '-');
-	ft_putchar((about->st_mode & S_IWOTH) ? 'w' : '-');
-	ft_putchar((about->st_mode & S_IXOTH) ? 'x' : '-');
+		ft_printf("-");
+	ft_printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
+	ft_printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
+	ft_printf("%c", (about->st_mode & S_IXUSR) ? 'x' : '-');
+	ft_printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
+	ft_printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
+	ft_printf("%c", (about->st_mode & S_IXGRP) ? 'x' : '-');
+	ft_printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
+	ft_printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
+	ft_printf("%c", (about->st_mode & S_IXOTH) ? 'x' : '-');
 	ft_printacl(about);
-	ft_putchar(' ');
+	ft_printf(" ");
 }

@@ -31,28 +31,22 @@ static void	ft_printerrors(t_list *lst)
 	}
 }
 
-static void	ft_errors(int argc, int index, char **argv, t_list **errlst)
+static void	ft_errors(char *argv, t_list **errlst)
 {
 	DIR		*dir;
 	t_list	*new;
-	int		i;
 
-	i = index;
-	while (i < argc)
+	if (!(dir = opendir(argv)) && ((errno == ENOENT) || (errno == EACCES)))
 	{
-		if (!(dir = opendir(argv[i])) && (errno == ENOENT))
+		if (!(new = ft_lstnew(argv, sizeof(argv))))
 		{
-			if (!(new = ft_lstnew(argv[i], sizeof(argv[i]))))
-			{
-				ft_lstdel(errlst, errdel);
-				return ;
-			}
-			ft_lstadd(errlst, new);
+			ft_lstdel(errlst, errdel);
+			return ;
 		}
-		if (dir)
-			closedir(dir);
-		i++;
+		ft_lstadd(errlst, new);
 	}
+	if (dir)
+		closedir(dir);
 	ft_lstsort(errlst, errsort);
 }
 
@@ -84,52 +78,39 @@ static t_list	*ft_singlefile(char *filename)
 	return (file);
 }
 
-static void	ft_single(int argc, int index, char **argv, t_flags *flags, t_list **sinlst)
+static void	ft_single(char *argv, t_flags *flags, t_list **sinlst)
 {
 	DIR		*dir;
 	t_list	*new;
-	int		i;
 
-	i = index;
-	while (i < argc)
+	if (!(dir = opendir(argv)) && (errno == ENOTDIR) && (errno != EACCES))
 	{
-		if (!(dir = opendir(argv[i])) && (errno == ENOTDIR))
+		if (!(new = ft_singlefile(argv)))
 		{
-			if (!(new = ft_singlefile(argv[i])))
-			{
-				ft_lstdel(sinlst, del);
-				return ;
-			}
-			ft_lstadd(sinlst, new);
+			ft_lstdel(sinlst, del);
+			return ;
 		}
-		if (dir)
-			closedir(dir);
-		i++;
+		ft_lstadd(sinlst, new);
 	}
+	if (dir)
+		closedir(dir);
 	ft_sortfiles(sinlst, flags);
 }
 
-static void	ft_dirlst(int argc, int index, char **argv, t_list **dirs)
+static void	ft_dirlst(char *argv, t_list **dirs)
 {
 	DIR		*dir;
 	t_list	*new;
-	int		i;
 
-	i = index;
-	while (i < argc)
+	if ((dir = opendir(argv)))
 	{
-		if ((dir = opendir(argv[i])))
+		if (!(new = ft_lstnew(argv, sizeof(argv))))
 		{
-			if (!(new = ft_lstnew(argv[i], sizeof(argv[i]))))
-			{
-				ft_lstdel(dirs, del);
-				return ;
-			}
-			ft_lstadd(dirs, new);
+			ft_lstdel(dirs, errdel);
+			return ;
 		}
-		if (dir)
-			closedir(dir);
-		i++;
+		ft_lstadd(dirs, new);
+		closedir(dir);
 	}
 	ft_lstsort(dirs, errsort);
 }
@@ -150,10 +131,10 @@ static void	ft_printall(t_all *all, t_flags *flags)
 	while (point)
 	{
 		if (all->errors || all->singles || count < size)
-			printf("\n%s:\n", (char *)all->dirs->content);
+			printf("\n%s:\n", point->content);
 		else if (count == 0)
-			printf("%s\n", (char *)all->dirs->content);
-		ft_ls((char *)all->dirs->content, flags);
+			printf("%s\n", point->content);
+		ft_ls(point->content, flags);
 		point = point->next;
 		count++;
 	}
@@ -177,9 +158,13 @@ int			main(int argc, char **argv)
 		ft_ls(argv[i], &flags);
 	else if (i < argc)
 	{
-		ft_errors(argc, i, argv, &all.errors);
-		ft_single(argc, i, argv, &flags, &all.singles);
-		ft_dirlst(argc, i, argv, &all.dirs);
+		while (i < argc)
+		{
+			ft_errors(argv[i], &all.errors);
+			ft_single(argv[i], &flags, &all.singles);
+			ft_dirlst(argv[i], &all.dirs);
+			i++;
+		}
 		ft_printall(&all, &flags);
 	}
 	else

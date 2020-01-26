@@ -111,6 +111,7 @@ char				*ft_strnew(size_t size);
 void				ft_memdel(void **ap);
 void				ft_strdel(char **as);
 void				ft_putchar(char c);
+char				*ft_strrchr(const char *s, int c);
 
 /*
 ** ------------------------------ Sort Functions -------------------------------

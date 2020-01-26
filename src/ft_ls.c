@@ -23,14 +23,20 @@ ft_strcmp(about->d_name, ".") && ft_strcmp(about->d_name, ".."))
 
 static void	ft_error(char *direct)
 {
-	ft_printf("ls: %s: %s\n", direct, strerror(errno));
+	char	*pointer;
+
+	pointer = ft_strrchr(direct, '/');
+	if (pointer)
+		ft_printf("ls: %s: %s\n", pointer + 1, strerror(errno));
+	else
+		ft_printf("ls: %s: %s\n", direct, strerror(errno));
 }
 
 void		ft_ls(char *direct, t_flags *flags)
 {
 	t_list	*files;
 
-	if (!(files = ft_readdir(direct, flags)) && errno)
+	if (!(files = ft_readdir(direct, flags)) && errno > 0)
 		return (ft_error(direct));
 	ft_sortfiles(&files, flags);
 	ft_printfiles(files, flags);

@@ -48,33 +48,33 @@ about->full_path : dirent->d_name, &st)) != 0)
 	return (1);
 }
 
-static t_list	*ft_singlefile(char *filename)
-{
-	t_about		about;
-	t_list		*file;
-	struct stat	st;
-
-	if (stat(filename, &st) == 0)
-		about.d_type = 0;
-	else if (lstat(filename, &st) == 0)
-		about.d_type = 4;
-	else
-		return (NULL);
-	if (!(about.d_name = ft_strdup(filename)))
-		return (NULL);
-	about.full_path = NULL;
-	about.st_gid = st.st_gid;
-	about.st_mode = st.st_mode;
-	about.st_nlink = st.st_nlink;
-	about.st_uid = st.st_uid;
-	about.c_time = st.st_ctimespec.tv_sec;
-	about.m_time = st.st_mtimespec.tv_sec;
-	about.st_size = st.st_size;
-	about.st_blocks = st.st_blocks;
-	if (!(file = ft_lstnew(&about, sizeof(t_about))))
-		return (NULL);
-	return (file);
-}
+//static t_list	*ft_singlefile(char *filename)
+//{
+//	t_about		about;
+//	t_list		*file;
+//	struct stat	st;
+//
+//	if (stat(filename, &st) == 0)
+//		about.d_type = 0;
+//	else if (lstat(filename, &st) == 0)
+//		about.d_type = 4;
+//	else
+//		return (NULL);
+//	if (!(about.d_name = ft_strdup(filename)))
+//		return (NULL);
+//	about.full_path = NULL;
+//	about.st_gid = st.st_gid;
+//	about.st_mode = st.st_mode;
+//	about.st_nlink = st.st_nlink;
+//	about.st_uid = st.st_uid;
+//	about.c_time = st.st_ctimespec.tv_sec;
+//	about.m_time = st.st_mtimespec.tv_sec;
+//	about.st_size = st.st_size;
+//	about.st_blocks = st.st_blocks;
+//	if (!(file = ft_lstnew(&about, sizeof(t_about))))
+//		return (NULL);
+//	return (file);
+//}
 
 t_list		*ft_readdir(char *direct, t_flags *flags)
 {
@@ -86,7 +86,7 @@ t_list		*ft_readdir(char *direct, t_flags *flags)
 
 	files = NULL;
 	if (!(dir = opendir(direct)))
-		return (ft_singlefile(direct));
+		return (NULL);
 	while ((dirent = readdir(dir)) != NULL)
 	{
 		if (dirent->d_name[0] == '.' && !flags->all)

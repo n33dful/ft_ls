@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/26 21:18:13 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/26 21:27:35 by cdarci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
@@ -50,7 +61,6 @@ typedef struct		s_aboutfile
 {
 	char			*full_path;
 	char			*d_name;
-	unsigned char	d_type;
 	__darwin_time_t	c_time;
 	__darwin_time_t	m_time;
 	mode_t			st_mode;
@@ -80,7 +90,6 @@ typedef struct		s_all
 	t_list			*dirs;
 	t_list			*denied;
 }					t_all;
-
 
 /*
 ** -----------------------------------------------------------------------------
@@ -113,6 +122,14 @@ void				ft_memdel(void **ap);
 void				ft_strdel(char **as);
 void				ft_putchar(char c);
 char				*ft_strrchr(const char *s, int c);
+void				ft_putchar_fd(char c, int fd);
+void				ft_putchar(char c);
+void				ft_putendl_fd(char const *s, int fd);
+void				ft_putendl(char const *s);
+void				ft_putnbr_fd(int n, int fd);
+void				ft_putnbr(int n);
+void				ft_putstr_fd(char const *s, int fd);
+void				ft_putstr(char const *s);
 
 /*
 ** ------------------------------ Sort Functions -------------------------------
@@ -135,13 +152,13 @@ void				ft_longformat(t_list *files, t_flags *flags);
 blkcnt_t			ft_elltotal(t_list *files);
 void				ft_elluser(int width, uid_t uid);
 void				ft_ellgroup(int width, gid_t gid);
-char    			*ft_permissions(t_about *about);
+char				*ft_permissions(t_about *about);
 void				*ft_memerror(t_list **files, DIR *dir);
 void				del(void *content, size_t content_size);
 t_list				*ft_readdir(char *direct, t_flags *flags);
 void				ft_sortfiles(t_list **files, t_flags *flags);
 void				ft_printfiles(t_list *files, t_flags *flags);
-char				*ft_fullpath(char *currFolder, char *nextFolder);
+char				*ft_fullpath(char *curr, char *next);
 int					ft_setflags(int argc, char **argv, t_flags *flags);
 
 #endif

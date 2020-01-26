@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/26 21:21:49 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/26 21:26:48 by cdarci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int	errsort(t_list *curr, t_list *next)
+static int		errsort(t_list *curr, t_list *next)
 {
 	char	*first;
 	char	*second;
@@ -13,25 +24,28 @@ static int	errsort(t_list *curr, t_list *next)
 	return (0);
 }
 
-static void	errdel(void *content, size_t content_size)
+static void		errdel(void *content, size_t content_size)
 {
 	if (content_size > 0)
 		ft_memdel(&content);
 }
 
-static void	ft_printerrors(t_list *lst)
+static void		ft_printerrors(t_list *lst)
 {
 	char	*str;
 
 	while (lst)
 	{
 		str = lst->content;
-		ft_printf("ls: %s: %s\n", str, strerror(2));
+		ft_putstr_fd("ls: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(2), 2);
 		lst = lst->next;
 	}
 }
 
-static void	ft_errors(char *argv, t_list **errlst)
+static void		ft_errors(char *argv, t_list **errlst)
 {
 	DIR		*dir;
 	t_list	*new;
@@ -56,11 +70,7 @@ static t_list	*ft_singlefile(char *filename)
 	t_list		*file;
 	struct stat	st;
 
-	if (stat(filename, &st) == 0)
-		about.d_type = 0;
-	else if (lstat(filename, &st) == 0)
-		about.d_type = 4;
-	else
+	if (lstat(filename, &st) != 0)
 		return (NULL);
 	if (!(about.d_name = ft_strdup(filename)))
 		return (NULL);
@@ -74,16 +84,20 @@ static t_list	*ft_singlefile(char *filename)
 	about.st_size = st.st_size;
 	about.st_blocks = st.st_blocks;
 	if (!(file = ft_lstnew(&about, sizeof(t_about))))
+	{
+		ft_strdel(&(about.d_name));
 		return (NULL);
+	}
 	return (file);
 }
 
-static void	ft_single(char *argv, t_flags *flags, t_list **sinlst)
+static void		ft_single(char *argv, t_flags *flags, t_list **sinlst)
 {
-	DIR		*dir;
-	t_list	*new;
+	struct stat	st;
+	t_list		*new;
 
-	if (!(dir = opendir(argv)) && (errno == ENOTDIR) && (errno != EACCES))
+	if (lstat(argv, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFLNK || \
+(st.st_mode & S_IFMT) == S_IFREG))
 	{
 		if (!(new = ft_singlefile(argv)))
 		{
@@ -92,17 +106,15 @@ static void	ft_single(char *argv, t_flags *flags, t_list **sinlst)
 		}
 		ft_lstadd(sinlst, new);
 	}
-	if (dir)
-		closedir(dir);
 	ft_sortfiles(sinlst, flags);
 }
 
-static void	ft_dirlst(char *argv, t_list **dirs)
+static void		ft_dirlst(char *argv, t_list **dirs)
 {
-	DIR		*dir;
-	t_list	*new;
+	struct stat	st;
+	t_list		*new;
 
-	if ((dir = opendir(argv)))
+	if (lstat(argv, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR)
 	{
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
@@ -110,17 +122,16 @@ static void	ft_dirlst(char *argv, t_list **dirs)
 			return ;
 		}
 		ft_lstadd(dirs, new);
-		closedir(dir);
 	}
 	ft_lstsort(dirs, errsort);
 }
 
-static void	ft_printall(t_all *all, t_flags *flags)
+static void		ft_printall(t_all *all, t_flags *flags)
 {
 	t_list	*point;
 	size_t	count;
 	size_t	size;
-	
+
 	count = 0;
 	size = ft_lstlen(all->dirs);
 	ft_printerrors(all->errors);
@@ -157,7 +168,7 @@ static void	ft_printall(t_all *all, t_flags *flags)
 	ft_lstdel(&all->denied, errdel);
 }
 
-static void	ft_denied(char *argv, t_list **dirs)
+static void		ft_denied(char *argv, t_list **dirs)
 {
 	DIR		*dir;
 	t_list	*new;
@@ -176,7 +187,7 @@ static void	ft_denied(char *argv, t_list **dirs)
 	ft_lstsort(dirs, errsort);
 }
 
-static void	ft_allbase(t_all *all)
+static void		ft_allbase(t_all *all)
 {
 	all->errors = NULL;
 	all->singles = NULL;
@@ -184,7 +195,7 @@ static void	ft_allbase(t_all *all)
 	all->denied = NULL;
 }
 
-int			main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	t_all	all;
 	t_flags	flags;
@@ -193,8 +204,6 @@ int			main(int argc, char **argv)
 	ft_allbase(&all);
 	if ((i = ft_setflags(argc, argv, &flags)) < 0)
 		return (1);
-	//if (i + 1 == argc)
-	//	ft_ls(argv[i], &flags);
 	else if (i < argc)
 	{
 		while (i < argc)

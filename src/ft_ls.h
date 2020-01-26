@@ -78,6 +78,7 @@ typedef struct		s_all
 	t_list			*errors;
 	t_list			*singles;
 	t_list			*dirs;
+	t_list			*denied;
 }					t_all;
 
 

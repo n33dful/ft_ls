@@ -103,10 +103,10 @@ void		ft_longformat(t_list *files, t_flags *flags)
 	{
 		about = files->content;
 		ft_ellmode(about);
-		ft_printf("%*d", lwidth, about->st_nlink);
+		ft_printf("%*d ", lwidth, about->st_nlink);
 		ft_elluser(uwidth, about->st_uid);
 		ft_ellgroup(gwidth, about->st_gid);
-		ft_printf(" %*lld ", swidth, about->st_size);
+		ft_printf("%*lld ", swidth, about->st_size);
 		ft_elltime(about);
 		ft_ellname(about, flags);
 		ft_printf("\n");

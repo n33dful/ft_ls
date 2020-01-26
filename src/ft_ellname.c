@@ -7,6 +7,7 @@ void	ft_ellname(t_about *about, t_flags *flags)
 	ssize_t	rs;
 
 	rs = readlink(about->full_path ? about->full_path : about->d_name, buf, 1024);
+	buf[rs] = '\0';
 	if (rs && flags->color && (about->st_mode & S_IFLNK) == 0120000)
 		ft_printf("\033[35m%s\033[0m -> %s", about->d_name, buf);
 	else if (rs && !flags->color && (about->st_mode & S_IFLNK) == 0120000)

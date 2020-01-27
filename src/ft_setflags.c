@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:22 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:21:40 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 17:54:34 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	ft_illegal(char ill, char *available)
 	ft_putstr_fd("ls: illegal option -- ", 2);
 	ft_putchar_fd(ill, 2);
 	ft_putchar_fd('\n', 2);
-	ft_putstr_fd("usage: ls [", 2);
+	ft_putstr_fd("usage: ls [-", 2);
 	ft_putstr_fd(available, 2);
 	ft_putendl_fd("] [file ...]", 2);
 	return (-1);
@@ -60,15 +60,15 @@ int			ft_setflags(int argc, char **argv, t_flags *flags)
 	int		i;
 	int		j;
 
-	available = "-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1";
+	available = "ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1";
 	ft_setbase(flags);
 	i = 1;
 	while (i < argc)
 	{
 		j = 1;
-		if (argv[i][0] != '-')
+		if (argv[i][0] != '-' || !ft_strcmp(argv[i], "-"))
 			return (i);
-		if (!ft_strcmp(argv[i], "--"))
+		else if (!ft_strcmp(argv[i], "--"))
 			return (i + 1);
 		while (argv[i][j])
 		{

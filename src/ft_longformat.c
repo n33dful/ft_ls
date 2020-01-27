@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:17:46 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 16:15:52 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 20:14:51 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void		ft_longformat(t_list *files, t_flags *flags)
 	lwidth = ft_findcolwlinks(files);
 	uwidth = ft_findcolwuser(files);
 	gwidth = ft_findcolwgroup(files);
-	if (!flags->single)
+	if (!flags->single && ft_lstlen(files) != 0)
 		ft_printf("total %lld\n", ft_elltotal(files));
 	while (files)
 	{

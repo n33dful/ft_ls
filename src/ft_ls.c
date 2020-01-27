@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:02 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 15:49:17 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 20:03:30 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void		ft_ls(char *direct, t_flags *flags)
 {
 	t_list	*files;
 
-	if (!(files = ft_readdir(direct, flags)) && errno > 0)
+	errno = 0;
+	if (!(files = ft_readdir(direct, flags)) && errno != 0)
 		return (ft_error(direct));
 	ft_sortfiles(&files, flags);
 	ft_printfiles(files, flags);

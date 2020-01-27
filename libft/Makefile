@@ -6,12 +6,12 @@
 #    By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/12 13:46:51 by cdarci            #+#    #+#              #
-#    Updated: 2020/01/27 16:16:22 by cdarci           ###   ########.fr        #
+#    Updated: 2020/01/27 20:06:14 by cdarci           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC=gcc
-FLAGS=-Wall -Wextra -Werror
+FLAGS=-g -Wall -Wextra -Werror
 NAME=libft.a
 HEADER=libft.h
 SRCS=ft_isprint.c\

@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:49 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 13:49:36 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 19:48:07 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ static void		ft_printerrors(t_list *lst)
 
 static void		ft_errors(char *argv, t_list **errlst)
 {
-	DIR		*dir;
-	t_list	*new;
+	struct stat	st;
+	t_list		*new;
 
-	if (!(dir = opendir(argv)) && (errno == ENOENT))
+	if (lstat(argv, &st) != 0 && (errno == ENOENT))
 	{
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
@@ -59,8 +59,6 @@ static void		ft_errors(char *argv, t_list **errlst)
 		}
 		ft_lstadd(errlst, new);
 	}
-	if (dir)
-		closedir(dir);
 	ft_lstsort(errlst, errsort);
 }
 
@@ -93,12 +91,14 @@ static t_list	*ft_singlefile(char *filename)
 
 static void		ft_single(char *argv, t_flags *flags, t_list **sinlst)
 {
+	struct stat	stdir;
 	struct stat	st;
 	t_list		*new;
 
-	if (lstat(argv, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFLNK || \
-(st.st_mode & S_IFMT) == S_IFREG))
+	if (lstat(argv, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFREG || (st.st_mode & S_IFMT) == S_IFLNK))
 	{
+		if ((st.st_mode & S_IFMT) == S_IFLNK && stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR)
+			return ;
 		if (!(new = ft_singlefile(argv)))
 		{
 			ft_lstdel(sinlst, del);
@@ -114,7 +114,7 @@ static void		ft_dirlst(char *argv, t_list **dirs)
 	struct stat	st;
 	t_list		*new;
 
-	if (lstat(argv, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR)
+	if (stat(argv, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR)
 	{
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
@@ -126,22 +126,33 @@ static void		ft_dirlst(char *argv, t_list **dirs)
 	ft_lstsort(dirs, errsort);
 }
 
+void			aaa()
+{
+	ft_putstr_fd("ls: ", 2);
+	ft_putstr_fd("fts_open", 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(2), 2);
+}
+
 static void		ft_printall(t_all *all, t_flags *flags)
 {
 	t_list	*point;
 	size_t	count;
 	size_t	size;
 
-	count = 0;
-	size = ft_lstlen(all->dirs);
-	ft_printerrors(all->errors);
+	//if (all->errors && !all->singles && !all->dirs)
+	//	aaa();
+	//else
+		ft_printerrors(all->errors);
 	flags->single = 1;
 	ft_printfiles(all->singles, flags);
 	flags->single = 0;
 	point = all->dirs;
+	count = 0;
+	size = ft_lstlen(all->dirs);
 	while (point)
 	{
-		if (count == 0 && !all->errors && !all->singles && size != 1)
+		if (count == 0 && ((!all->singles && size != 1) || (all->errors && !all->singles)))
 			ft_printf("%s:\n", point->content);
 		else if (all->errors || all->singles || (count < size && size != 1))
 			ft_printf("\n%s:\n", point->content);

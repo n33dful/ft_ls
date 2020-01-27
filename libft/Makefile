@@ -6,7 +6,7 @@
 #    By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/12 13:46:51 by cdarci            #+#    #+#              #
-#    Updated: 2020/01/06 18:37:53 by cdarci           ###   ########.fr        #
+#    Updated: 2020/01/27 16:16:22 by cdarci           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,7 +89,7 @@ $(NAME): $(OBJS) $(HEADER)
 	@ranlib $(NAME)
 
 .c.o:
-	$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	@rm -f $(OBJS)

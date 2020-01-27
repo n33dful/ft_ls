@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:49 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:26:48 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 13:49:36 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,54 +146,92 @@ static void		ft_printall(t_all *all, t_flags *flags)
 		else if (all->errors || all->singles || (count < size && size != 1))
 			ft_printf("\n%s:\n", point->content);
 		ft_ls(point->content, flags);
+		errno = 0;
 		point = point->next;
 		count++;
 	}
-	count = 0;
-	size = ft_lstlen(all->denied);
-	point = all->denied;
-	while (point)
-	{
-		if (count == 0 && !all->errors && !all->singles && size != 1)
-			ft_printf("%s:\n", point->content);
-		else if (all->errors || all->singles || (count < size && size != 1))
-			ft_printf("\n%s:\n", point->content);
-		ft_ls(point->content, flags);
-		point = point->next;
-		count++;
-	}
+	//count = 0;
+	//size = ft_lstlen(all->denied);
+	//point = all->denied;
+	//while (point)
+	//{
+	//	if (count == 0 && !all->errors && !all->singles && size != 1)
+	//		ft_printf("%s:\n", point->content);
+	//	else if (all->errors || all->singles || (count < size && size != 1))
+	//		ft_printf("\n%s:\n", point->content);
+	//	ft_ls(point->content, flags);
+	//	point = point->next;
+	//	count++;
+	//}
 	ft_lstdel(&all->errors, errdel);
 	ft_lstdel(&all->singles, del);
 	ft_lstdel(&all->dirs, errdel);
-	ft_lstdel(&all->denied, errdel);
+	//ft_lstdel(&all->denied, errdel);
 }
 
-static void		ft_denied(char *argv, t_list **dirs)
-{
-	DIR		*dir;
-	t_list	*new;
-
-	if (!(dir = opendir(argv)) && errno == EACCES)
-	{
-		if (!(new = ft_lstnew(argv, sizeof(argv))))
-		{
-			ft_lstdel(dirs, errdel);
-			return ;
-		}
-		ft_lstadd(dirs, new);
-	}
-	if (dir)
-		closedir(dir);
-	ft_lstsort(dirs, errsort);
-}
+//static void		ft_denied(char *argv, t_list **dirs)
+//{
+//	DIR		*dir;
+//	t_list	*new;
+//
+//	if (!(dir = opendir(argv)) && errno == EACCES)
+//	{
+//		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
+//		{
+//			ft_lstdel(dirs, errdel);
+//			return ;
+//		}
+//		ft_lstadd(dirs, new);
+//	}
+//	if (dir)
+//		closedir(dir);
+//	ft_lstsort(dirs, errsort);
+//}
 
 static void		ft_allbase(t_all *all)
 {
 	all->errors = NULL;
 	all->singles = NULL;
 	all->dirs = NULL;
-	all->denied = NULL;
+	//all->denied = NULL;
 }
+
+//static void		ft_lstaddtail(t_list **alst, t_list *new)
+//{
+//	t_list	*point;
+//
+//	point = (*alst);
+//	if (!point)
+//	{
+//		(*alst) = new;
+//		return ;
+//	}
+//	while (point->next)
+//		point = point->next;
+//	point->next = new;
+//}
+//
+//static t_list	*ft_lstfromargv(char **argv)
+//{
+//	t_list	*list;
+//	t_list	*new;
+//	size_t	i;
+//
+//	i = 0;
+//	list = NULL;
+//	while (argv[i])
+//	{
+//		if (!(new = ft_lstnew(argv[i], ft_strlen(argv[i]) + 1)))
+//		{
+//			ft_lstdel(&list, errdel);
+//			return (NULL);
+//		}
+//		ft_lstaddtail(&list, new);
+//		i++;
+//	}
+//	ft_lstsort(&list, errsort);
+//	return (list);
+//}
 
 int				main(int argc, char **argv)
 {
@@ -211,7 +249,7 @@ int				main(int argc, char **argv)
 			ft_errors(argv[i], &all.errors);
 			ft_single(argv[i], &flags, &all.singles);
 			ft_dirlst(argv[i], &all.dirs);
-			ft_denied(argv[i], &all.denied);
+			//ft_denied(argv[i], &all.denied);
 			errno = 0;
 			i++;
 		}

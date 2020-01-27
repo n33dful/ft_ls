@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:02 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:18:05 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 15:49:17 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	ft_recursively(char *direct, t_flags *flags, t_list *files)
 	while (files)
 	{
 		about = files->content;
-		if ((about->st_mode & S_IFDIR) == 0040000 && \
+		if ((about->st_mode & S_IFMT) == S_IFDIR && \
 ft_strcmp(about->d_name, ".") && ft_strcmp(about->d_name, ".."))
 		{
 			nextdirect = ft_fullpath(direct, about->d_name);
@@ -36,11 +36,15 @@ static void	ft_error(char *direct)
 {
 	char	*pointer;
 
+	ft_putstr_fd("ls: ", 2);
 	pointer = ft_strrchr(direct, '/');
 	if (pointer)
-		ft_printf("ls: %s: %s\n", pointer + 1, strerror(errno));
+		ft_putstr_fd(pointer + 1, 2);
 	else
-		ft_printf("ls: %s: %s\n", direct, strerror(errno));
+		ft_putstr_fd(direct, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(errno), 2);
+	errno = 0;
 }
 
 void		ft_ls(char *direct, t_flags *flags)

@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:13 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:27:35 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/27 13:37:18 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ typedef struct		s_all
 	t_list			*errors;
 	t_list			*singles;
 	t_list			*dirs;
-	t_list			*denied;
+	//t_list			*denied;
 }					t_all;
 
 /*

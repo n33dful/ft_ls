@@ -6,7 +6,7 @@
 #    By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/14 15:59:54 by cdarci            #+#    #+#              #
-#    Updated: 2019/11/04 20:17:21 by cdarci           ###   ########.fr        #
+#    Updated: 2020/01/27 16:16:33 by cdarci           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,14 +57,14 @@ OBJSDIR=$(addprefix src/, $(OBJECTS))
 all: $(NAME)
 
 $(NAME): $(OBJSDIR)
-	ar rcs $(NAME) $(OBJSDIR)
-	ranlib $(NAME)
+	@ar rcs $(NAME) $(OBJSDIR)
+	@ranlib $(NAME)
 
 clean:
-	rm -f $(OBJSDIR)
+	@rm -f $(OBJSDIR)
 
 fclean:clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

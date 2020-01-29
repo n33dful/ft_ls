@@ -14,7 +14,9 @@
 
 void	ft_sortfiles(t_list **files, t_flags *flags)
 {
-	if (flags->reverse && !flags->time && !flags->size)
+	if (flags->not_sorted)
+		return ;
+	else if (flags->reverse && !flags->time && !flags->size)
 		ft_lstsort(files, by_name_desc);
 	else if (!flags->reverse && flags->size)
 		ft_lstsort(files, by_size_asc);

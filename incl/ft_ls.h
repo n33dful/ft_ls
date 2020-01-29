@@ -48,6 +48,7 @@ typedef struct		s_flags
 	int				time;
 	int				group_only;
 	int				in_line;
+	int				not_sorted;
 }					t_flags;
 
 typedef struct		s_aboutfile

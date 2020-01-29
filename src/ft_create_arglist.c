@@ -52,7 +52,7 @@ void			ft_create_error_list(char *argv, t_list **errlst)
 			ft_lstdel(errlst, lstdel_string);
 			return ;
 		}
-		ft_lstadd_front(errlst, new);
+		ft_lstadd_back(errlst, new);
 	}
 	ft_lstsort(errlst, errsort);
 	errno = 0;
@@ -75,7 +75,7 @@ stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR)
 			ft_lstdel(sinlst, lstdel_struct);
 			return ;
 		}
-		ft_lstadd_front(sinlst, new);
+		ft_lstadd_back(sinlst, new);
 	}
 	ft_sortfiles(sinlst, flags);
 	errno = 0;
@@ -93,7 +93,7 @@ void			ft_create_folder_list(char *argv, t_list **dirs)
 			ft_lstdel(dirs, lstdel_string);
 			return ;
 		}
-		ft_lstadd_front(dirs, new);
+		ft_lstadd_back(dirs, new);
 	}
 	ft_lstsort(dirs, errsort);
 	errno = 0;

@@ -36,6 +36,7 @@ static void	ft_nullifyflags(t_flags *flags)
 	flags->time = 0;
 	flags->group_only = 0;
 	flags->in_line = 0;
+	flags->not_sorted = 0;
 }
 
 static void	ft_setcurrentflag_parttwo(char fl, t_flags *flags)
@@ -53,6 +54,11 @@ static void	ft_setcurrentflag_parttwo(char fl, t_flags *flags)
 	{
 		flags->in_line = 1;
 		flags->ell = 0;
+	}
+	else if (fl == 'f')
+	{
+		flags->not_sorted = 1;
+		flags->all = 1;
 	}
 }
 

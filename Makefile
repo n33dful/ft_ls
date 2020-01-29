@@ -16,7 +16,8 @@ FLAGS=-Wall -Wextra -Werror
 DIR_S=src
 DIR_O=temp
 HEADER=incl
-SOURCES=main.c\
+SOURCES=ft_create_arglist.c\
+main.c\
 ft_setflags.c\
 ft_readdir.c\
 ft_sortfiles.c\

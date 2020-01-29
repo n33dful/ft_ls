@@ -18,7 +18,7 @@ void	ft_printfiles(t_list *files, t_flags *flags)
 
 	if (flags->ell)
 		ft_longformat(files, flags);
-	else
+	else /*if (flags->in_line)*/
 	{
 		while (files)
 		{

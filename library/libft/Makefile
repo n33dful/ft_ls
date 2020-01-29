@@ -29,8 +29,8 @@ ft_isprint.c\
 ft_isspace.c\
 ft_isupper.c\
 ft_itoa.c\
-ft_lstadd.c\
-ft_lstaddtail.c\
+ft_lstadd_back.c\
+ft_lstadd_front.c\
 ft_lstdel.c\
 ft_lstdelone.c\
 ft_lstiter.c\

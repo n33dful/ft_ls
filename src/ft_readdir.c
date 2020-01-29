@@ -79,7 +79,7 @@ t_list		*ft_readdir(char *direct, t_flags *flags)
 			return (ft_memerror(&files, dir));
 		if (!(new = ft_lstnew(&about, sizeof(t_about))))
 			return (ft_memerror(&files, dir));
-		ft_lstadd(&files, new);
+		ft_lstadd_front(&files, new);
 	}
 	closedir(dir);
 	return (files);

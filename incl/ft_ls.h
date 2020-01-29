@@ -35,6 +35,21 @@
 ** ------------------------- Structure Definition ------------------------------
 */
 
+typedef struct		s_flags
+{
+	int				all;
+	int				color;
+	int				ell;
+	int				numerically;
+	int				recursively;
+	int				reverse;
+	int				single;
+	int				size;
+	int				time;
+	int				group_only;
+	int				in_line;
+}					t_flags;
+
 typedef struct		s_aboutfile
 {
 	__darwin_time_t	c_time;
@@ -48,19 +63,6 @@ typedef struct		s_aboutfile
 	off_t			st_size;
 	uid_t			st_uid;
 }					t_about;
-
-typedef struct		s_flags
-{
-	int				all;
-	int				color;
-	int				ell;
-	int				numerically;
-	int				recursively;
-	int				reverse;
-	int				single;
-	int				size;
-	int				time;
-}					t_flags;
 
 typedef struct		s_all
 {
@@ -108,5 +110,9 @@ void				ft_longformat(t_list *files, t_flags *flags);
 void				ft_printfiles(t_list *files, t_flags *flags);
 void				ft_sortfiles(t_list **files, t_flags *flags);
 void				lstdel_string(void *content, size_t content_size);
+
+void				ft_create_error_list(char *argv, t_list **errlst);
+void				ft_create_file_list(char *argv, t_flags *flags, t_list **sinlst);
+void				ft_create_folder_list(char *argv, t_list **dirs);
 
 #endif

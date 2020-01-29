@@ -23,12 +23,13 @@ void	ft_ellname(t_about *about, t_flags *flags)
 	buf[rs] = '\0';
 	if (rs && flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
 		ft_printf("\033[35m%s\033[0m -> %s", about->d_name, buf);
-	else if (rs && !flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
-		ft_printf("%s -> %s", about->d_name, buf);
 	else if (flags->color && (about->st_mode & S_IFMT) == S_IFDIR)
 		ft_printf("\033[34m%s\033[0m", about->d_name);
 	else if (flags->color && (about->st_mode & S_IFMT) == S_IXUSR)
 		ft_printf("\033[31m%s\033[0m", about->d_name);
+	else if (rs && !flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
+		ft_printf("%s -> %s", about->d_name, buf);
 	else
 		ft_printf("%s", about->d_name);
+	ft_printf("\n");
 }

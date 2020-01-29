@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static int	ft_illegal(char ill, char *available)
+static int	ft_illegaloption(char ill, char *available)
 {
 	ft_putstr_fd("ls: illegal option -- ", 2);
 	ft_putchar_fd(ill, 2);
@@ -23,7 +23,7 @@ static int	ft_illegal(char ill, char *available)
 	return (-1);
 }
 
-static void	ft_setbase(t_flags *flags)
+static void	ft_nullifyflags(t_flags *flags)
 {
 	flags->all = 0;
 	flags->color = 0;
@@ -34,16 +34,39 @@ static void	ft_setbase(t_flags *flags)
 	flags->single = 0;
 	flags->size = 0;
 	flags->time = 0;
+	flags->group_only = 0;
+	flags->in_line = 0;
 }
 
-static void	ft_setnew(char fl, t_flags *flags)
+static void	ft_setcurrentflag_parttwo(char fl, t_flags *flags)
+{
+	if (fl == 'n' || fl == 'g')
+	{
+		if (fl == 'n')
+			flags->numerically = 1;
+		else if (fl == 'g')
+			flags->group_only = 1;
+		flags->ell = 1;
+		flags->in_line = 0;
+	}
+	else if (fl == '1')
+	{
+		flags->in_line = 1;
+		flags->ell = 0;
+	}
+}
+
+static void	ft_setcurrentflag_partone(char fl, t_flags *flags)
 {
 	if (fl == 'R')
 		flags->recursively = 1;
 	else if (fl == 'a')
 		flags->all = 1;
 	else if (fl == 'l')
+	{
 		flags->ell = 1;
+		flags->in_line = 0;
+	}
 	else if (fl == 'r')
 		flags->reverse = 1;
 	else if (fl == 't')
@@ -52,11 +75,8 @@ static void	ft_setnew(char fl, t_flags *flags)
 		flags->size = 1;
 	else if (fl == 'G')
 		flags->color = 1;
-	else if (fl == 'n')
-	{
-		flags->numerically = 1;
-		flags->ell = 1;
-	}
+	else
+		ft_setcurrentflag_parttwo(fl, flags);
 }
 
 int			ft_setflags(int argc, char **argv, t_flags *flags)
@@ -67,7 +87,7 @@ int			ft_setflags(int argc, char **argv, t_flags *flags)
 	int		j;
 
 	available = "ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1";
-	ft_setbase(flags);
+	ft_nullifyflags(flags);
 	i = 1;
 	while (i < argc)
 	{
@@ -79,8 +99,8 @@ int			ft_setflags(int argc, char **argv, t_flags *flags)
 		while (argv[i][j])
 		{
 			if (!(fl = ft_strchr(available, argv[i][j])))
-				return (ft_illegal(argv[i][j], available));
-			ft_setnew(*fl, flags);
+				return (ft_illegaloption(argv[i][j], available));
+			ft_setcurrentflag_partone(*fl, flags);
 			j++;
 		}
 		i++;

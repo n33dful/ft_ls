@@ -12,51 +12,18 @@
 
 #include "libft.h"
 
-static void		ft_addtail(t_list **alst, t_list *new_lst)
-{
-	t_list *pointer;
-
-	pointer = (*alst);
-	if (pointer && new_lst)
-	{
-		while (pointer->next)
-			pointer = pointer->next;
-		pointer->next = new_lst;
-	}
-}
-
-static t_list	*ft_listdel(t_list **list)
-{
-	t_list	*next_elem;
-
-	while ((*list))
-	{
-		next_elem = (*list)->next;
-		if ((*list)->content)
-			free((*list)->content);
-		free((*list));
-		(*list) = next_elem;
-	}
-	return (NULL);
-}
-
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
 	t_list	*head;
 	t_list	*new;
 
-	if (!lst || !f || !(head = (t_list *)malloc(sizeof(t_list))))
+	if (!lst || !f)
 		return (NULL);
-	head = f(lst);
-	head->next = NULL;
-	lst = lst->next;
+	head = NULL;
 	while (lst)
 	{
-		if (!(new = (t_list *)malloc(sizeof(t_list))))
-			return (ft_listdel(&head));
-		new = f(lst);
-		new->next = NULL;
-		ft_addtail(&head, new);
+		if ((new = f(lst)))
+			ft_lstadd_back(&head, new);
 		lst = lst->next;
 	}
 	return (head);

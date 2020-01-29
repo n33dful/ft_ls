@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
+void	ft_ellgroup(int width, gid_t gid, t_lsflags *flags)
 {
 	struct group *gr;
 
@@ -21,5 +21,5 @@ void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
 		ft_printf("%-*s", width, gr->gr_name);
 	else
 		ft_printf("%-*d", width, gid);
-	ft_printf(" ");
+	ft_printf("  ");
 }

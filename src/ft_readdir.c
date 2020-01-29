@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static int	ft_setfullpath(struct dirent *dirent, char *direct, t_about *about)
+static int	ft_setfullpath(struct dirent *dirent, char *direct, t_aboutfile *about)
 {
 	if (ft_strcmp(direct, "."))
 	{
@@ -31,14 +31,14 @@ static void	*ft_memerror(t_list **files, DIR *dir)
 	return (NULL);
 }
 
-static int	ft_setdirent(struct dirent *dirent, t_about *about)
+static int	ft_setdirent(struct dirent *dirent, t_aboutfile *about)
 {
 	if (!(about->d_name = ft_strdup(dirent->d_name)))
 		return (0);
 	return (1);
 }
 
-static int	ft_setstat(struct dirent *dirent, t_about *about)
+static int	ft_setstat(struct dirent *dirent, t_aboutfile *about)
 {
 	struct stat	st;
 
@@ -56,12 +56,12 @@ about->full_path : dirent->d_name, &st)) != 0)
 	return (1);
 }
 
-t_list		*ft_readdir(char *direct, t_flags *flags)
+t_list		*ft_readdir(char *direct, t_lsflags *flags)
 {
 	DIR				*dir;
 	t_list			*files;
 	t_list			*new;
-	t_about			about;
+	t_aboutfile			about;
 	struct dirent	*dirent;
 
 	files = NULL;
@@ -77,7 +77,7 @@ t_list		*ft_readdir(char *direct, t_flags *flags)
 			return (ft_memerror(&files, dir));
 		if (!ft_setstat(dirent, &about))
 			return (ft_memerror(&files, dir));
-		if (!(new = ft_lstnew(&about, sizeof(t_about))))
+		if (!(new = ft_lstnew(&about, sizeof(t_aboutfile))))
 			return (ft_memerror(&files, dir));
 		ft_lstadd_back(&files, new);
 	}

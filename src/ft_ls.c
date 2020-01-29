@@ -12,10 +12,10 @@
 
 #include "ft_ls.h"
 
-static void	ft_recursively(char *direct, t_flags *flags, t_list *files)
+static void	ft_recursively(char *direct, t_lsflags *flags, t_list *files)
 {
 	char	*nextdirect;
-	t_about	*about;
+	t_aboutfile	*about;
 
 	while (files)
 	{
@@ -47,7 +47,7 @@ static void	ft_error(char *direct)
 	errno = 0;
 }
 
-void		ft_ls(char *direct, t_flags *flags)
+void		ft_ls(char *direct, t_lsflags *flags)
 {
 	t_list	*files;
 

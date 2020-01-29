@@ -23,7 +23,7 @@ static void		lstprint_errors(t_list *lst)
 	ft_putendl_fd(strerror(2), 2);
 }
 
-static void		ft_printall(t_all *all, t_flags *flags)
+static void		ft_printall(t_all *all, t_lsflags *flags)
 {
 	t_list	*point;
 	size_t	count;
@@ -55,7 +55,7 @@ static void		ft_printall(t_all *all, t_flags *flags)
 int				main(int argc, char **argv)
 {
 	t_all	all;
-	t_flags	flags;
+	t_lsflags	flags;
 	int		i;
 
 	all.errors = NULL;

@@ -14,7 +14,7 @@
 
 blkcnt_t	ft_elltotal(t_list *files)
 {
-	t_about		*about;
+	t_aboutfile		*about;
 	blkcnt_t	total;
 
 	total = 0;

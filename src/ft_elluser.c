@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	ft_elluser(int width, uid_t uid, t_flags *flags)
+void	ft_elluser(int width, uid_t uid, t_lsflags *flags)
 {
 	struct passwd *pass;
 
@@ -21,5 +21,5 @@ void	ft_elluser(int width, uid_t uid, t_flags *flags)
 		ft_printf("%-*s", width, pass->pw_name);
 	else
 		ft_printf("%-*d", width, uid);
-	ft_printf(" ");
+	ft_printf("  ");
 }

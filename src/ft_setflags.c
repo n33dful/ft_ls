@@ -23,7 +23,7 @@ static int	ft_illegaloption(char ill, char *available)
 	return (-1);
 }
 
-static void	ft_nullifyflags(t_flags *flags)
+static void	ft_nullifyflags(t_lsflags *flags)
 {
 	flags->all = 0;
 	flags->color = 0;
@@ -37,16 +37,20 @@ static void	ft_nullifyflags(t_flags *flags)
 	flags->group_only = 0;
 	flags->in_line = 0;
 	flags->not_sorted = 0;
+	flags->slash = 0;
+	flags->user_only = 0;
 }
 
-static void	ft_setcurrentflag_parttwo(char fl, t_flags *flags)
+static void	ft_setcurrentflag_parttwo(char fl, t_lsflags *flags)
 {
-	if (fl == 'n' || fl == 'g')
+	if (fl == 'n' || fl == 'g' || fl == 'o')
 	{
 		if (fl == 'n')
 			flags->numerically = 1;
 		else if (fl == 'g')
 			flags->group_only = 1;
+		else if (fl == 'o')
+			flags->user_only = 1;
 		flags->ell = 1;
 		flags->in_line = 0;
 	}
@@ -60,9 +64,11 @@ static void	ft_setcurrentflag_parttwo(char fl, t_flags *flags)
 		flags->not_sorted = 1;
 		flags->all = 1;
 	}
+	else if (fl == 'p')
+		flags->slash = 1;
 }
 
-static void	ft_setcurrentflag_partone(char fl, t_flags *flags)
+static void	ft_setcurrentflag_partone(char fl, t_lsflags *flags)
 {
 	if (fl == 'R')
 		flags->recursively = 1;
@@ -85,7 +91,7 @@ static void	ft_setcurrentflag_partone(char fl, t_flags *flags)
 		ft_setcurrentflag_parttwo(fl, flags);
 }
 
-int			ft_setflags(int argc, char **argv, t_flags *flags)
+int			ft_setflags(int argc, char **argv, t_lsflags *flags)
 {
 	char	*available;
 	char	*fl;

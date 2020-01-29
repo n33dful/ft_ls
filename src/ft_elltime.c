@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	ft_elltime(t_about *about)
+void	ft_elltime(t_aboutfile *about)
 {
 	char		*strtime;
 

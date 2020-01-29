@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	ft_ellname(t_about *about, t_flags *flags)
+void	ft_ellname(t_aboutfile *about, t_lsflags *flags)
 {
 	char	buf[1024];
 	char	*full;
@@ -31,5 +31,7 @@ void	ft_ellname(t_about *about, t_flags *flags)
 		ft_printf("%s -> %s", about->d_name, buf);
 	else
 		ft_printf("%s", about->d_name);
+	if (flags->slash && (about->st_mode & S_IFMT) == S_IFDIR)
+		ft_printf("/");
 	ft_printf("\n");
 }

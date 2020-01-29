@@ -14,7 +14,7 @@
 
 static int	ft_findcolwlinks(t_list *files)
 {
-	t_about	*about;
+	t_aboutfile	*about;
 	int		colw;
 
 	colw = 0;
@@ -28,9 +28,9 @@ static int	ft_findcolwlinks(t_list *files)
 	return (ft_numlen(colw));
 }
 
-static int	ft_findcolwuser(t_list *files, t_flags *flags)
+static int	ft_findcolwuser(t_list *files, t_lsflags *flags)
 {
-	t_about			*about;
+	t_aboutfile			*about;
 	struct passwd	*passwd;
 	int				colw;
 
@@ -51,12 +51,12 @@ static int	ft_findcolwuser(t_list *files, t_flags *flags)
 		}
 		files = files->next;
 	}
-	return (colw + 1);
+	return (colw);
 }
 
-static int	ft_findcolwgroup(t_list *files, t_flags *flags)
+static int	ft_findcolwgroup(t_list *files, t_lsflags *flags)
 {
-	t_about			*about;
+	t_aboutfile			*about;
 	struct group	*group;
 	int				colw;
 
@@ -77,12 +77,12 @@ static int	ft_findcolwgroup(t_list *files, t_flags *flags)
 		}
 		files = files->next;
 	}
-	return (colw + 1);
+	return (colw);
 }
 
 static int	ft_findcolwsize(t_list *files)
 {
-	t_about	*about;
+	t_aboutfile	*about;
 	int		colw;
 
 	colw = 0;
@@ -96,9 +96,9 @@ static int	ft_findcolwsize(t_list *files)
 	return (ft_numlen(colw));
 }
 
-void		ft_longformat(t_list *files, t_flags *flags)
+void		ft_longformat(t_list *files, t_lsflags *flags)
 {
-	t_about	*about;
+	t_aboutfile	*about;
 	int		uwidth;
 	int		gwidth;
 	int		lwidth;
@@ -117,7 +117,10 @@ void		ft_longformat(t_list *files, t_flags *flags)
 		ft_printf("%*d ", lwidth, about->st_nlink);
 		if (!flags->group_only)
 			ft_elluser(uwidth, about->st_uid, flags);
-		ft_ellgroup(gwidth, about->st_gid, flags);
+		if (!flags->user_only)
+			ft_ellgroup(gwidth, about->st_gid, flags);
+		if (flags->group_only && flags->user_only)
+			ft_printf("  ");
 		ft_printf("%*lld ", swidth, about->st_size);
 		ft_elltime(about);
 		ft_ellname(about, flags);

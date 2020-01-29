@@ -14,8 +14,8 @@
 
 int	by_size_asc(t_list *current, t_list *next)
 {
-	t_about	*first;
-	t_about	*second;
+	t_aboutfile	*first;
+	t_aboutfile	*second;
 
 	first = current->content;
 	second = next->content;
@@ -28,8 +28,8 @@ int	by_size_asc(t_list *current, t_list *next)
 
 int	by_size_desc(t_list *current, t_list *next)
 {
-	t_about	*first;
-	t_about	*second;
+	t_aboutfile	*first;
+	t_aboutfile	*second;
 
 	first = current->content;
 	second = next->content;

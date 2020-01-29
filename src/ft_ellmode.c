@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static void	ft_acl(t_about *about)
+static void	ft_acl(t_aboutfile *about)
 {
 	acl_t		acl;
 	acl_entry_t	dummy;
@@ -37,7 +37,7 @@ static void	ft_acl(t_about *about)
 		ft_printf(" ");
 }
 
-static void	ft_ownerperm(t_about *about)
+static void	ft_ownerperm(t_aboutfile *about)
 {
 	ft_printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
 	ft_printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
@@ -53,7 +53,7 @@ about->st_mode & S_IXUSR && about->st_mode & S_ISUID)
 		ft_printf("-");
 }
 
-static void	ft_groupperm(t_about *about)
+static void	ft_groupperm(t_aboutfile *about)
 {
 	ft_printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
 	ft_printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
@@ -69,7 +69,7 @@ about->st_mode & S_IXGRP && about->st_mode & S_ISGID)
 		ft_printf("-");
 }
 
-static void	ft_otherperm(t_about *about)
+static void	ft_otherperm(t_aboutfile *about)
 {
 	ft_printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
 	ft_printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
@@ -84,7 +84,7 @@ static void	ft_otherperm(t_about *about)
 		ft_printf("-");
 }
 
-void		ft_ellmode(t_about *about)
+void		ft_ellmode(t_aboutfile *about)
 {
 	if ((about->st_mode & S_IFMT) == S_IFBLK)
 		ft_printf("b");

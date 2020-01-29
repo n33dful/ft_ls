@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	ft_sortfiles(t_list **files, t_flags *flags)
+void	ft_sortfiles(t_list **files, t_lsflags *flags)
 {
 	if (flags->not_sorted)
 		return ;

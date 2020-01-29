@@ -15,7 +15,7 @@ static int		errsort(t_list *curr, t_list *next)
 
 static t_list	*ft_singlefile(char *filename)
 {
-	t_about		about;
+	t_aboutfile		about;
 	t_list		*file;
 	struct stat	st;
 
@@ -32,7 +32,7 @@ static t_list	*ft_singlefile(char *filename)
 	about.m_time = st.st_mtimespec.tv_sec;
 	about.st_size = st.st_size;
 	about.st_blocks = st.st_blocks;
-	if (!(file = ft_lstnew(&about, sizeof(t_about))))
+	if (!(file = ft_lstnew(&about, sizeof(t_aboutfile))))
 	{
 		ft_strdel(&(about.d_name));
 		return (NULL);
@@ -58,7 +58,7 @@ void			ft_create_error_list(char *argv, t_list **errlst)
 	errno = 0;
 }
 
-void			ft_create_file_list(char *argv, t_flags *flags, t_list **sinlst)
+void			ft_create_file_list(char *argv, t_lsflags *flags, t_list **sinlst)
 {
 	struct stat	stdir;
 	struct stat	st;

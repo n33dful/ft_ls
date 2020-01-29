@@ -14,7 +14,7 @@
 
 void	lstdel_struct(void *content, size_t content_size)
 {
-	t_about	*about;
+	t_aboutfile	*about;
 
 	about = NULL;
 	if (content_size > 0)

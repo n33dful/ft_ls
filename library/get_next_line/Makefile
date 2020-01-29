@@ -5,56 +5,39 @@
 #                                                     +:+ +:+         +:+      #
 #    By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/01/26 21:25:45 by cdarci            #+#    #+#              #
-#    Updated: 2020/01/27 16:16:43 by cdarci           ###   ########.fr        #
+#    Created: 2019/09/12 13:46:51 by cdarci            #+#    #+#              #
+#    Updated: 2020/01/06 18:37:53 by cdarci           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 C=gcc
-NAME=ft_ls
+NAME=libftgnl.a
 FLAGS=-Wall -Wextra -Werror
+LIBFT=../libft
 DIR_S=src
 DIR_O=temp
 HEADER=incl
-SOURCES=main.c\
-ft_setflags.c\
-ft_readdir.c\
-ft_sortfiles.c\
-ft_printfiles.c\
-ft_fullpath.c\
-lstdel_funcs.c\
-ft_numlen.c\
-lstsort_byname.c\
-lstsort_bytime.c\
-lstsort_bysize.c\
-ft_longformat.c\
-ft_elltotal.c\
-ft_ellgroup.c\
-ft_elluser.c \
-ft_elltime.c\
-ft_ellname.c\
-ft_ellmode.c\
-ft_ls.c
+SOURCES=get_next_line.c
 SRCS=$(addprefix $(DIR_S)/,$(SOURCES))
 OBJS=$(addprefix $(DIR_O)/,$(SOURCES:.c=.o))
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@make libftprintf -C library
-	@$(C) $(FLAGS) $(OBJS) -I$(HEADER) -Llibrary -lftprintf -o $(NAME)
+	@make -C $(LIBFT)
+	@cp $(LIBFT)/libft.a ./$(NAME)
+	@ar rc $(NAME) $(OBJS)
+	@ranlib $(NAME)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	@$(C) $(FLAGS) -I$(HEADER) -o $@ -c $<
 
 clean:
-	@make clean -C library
 	@rm -f $(OBJS)
+	@make clean -C $(LIBFT)
 
 fclean: clean
-	@make fclean -C library
 	@rm -f $(NAME)
+	@make fclean -C $(LIBFT)
 
 re: fclean all
-
-.PHONY: clean fclean

@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ellgroup.c                                      :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 21:16:44 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:16:47 by cdarci           ###   ########.fr       */
+/*   Created: 2019/10/20 18:05:09 by cdarci            #+#    #+#             */
+/*   Updated: 2019/11/02 17:58:18 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "libftprintf.h"
 
-void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
+int				ft_printf(const char *format, ...)
 {
-	struct group *gr;
+	int		count;
+	va_list ap;
 
-	gr = getgrgid(gid);
-	if (gr->gr_name && !flags->numerically)
-		ft_printf("%-*s", width, gr->gr_name);
-	else
-		ft_printf("%-*d", width, gid);
-	ft_printf(" ");
+	count = 0;
+	if (!format)
+		exit(-1);
+	va_start(ap, format);
+	while (*format)
+	{
+		if (*format == '%')
+			count += pf_parse(&format, ap);
+		else
+			count += pf_putchar(*format);
+		if (*format == '\0')
+			break ;
+		format++;
+	}
+	va_end(ap);
+	return (count);
 }

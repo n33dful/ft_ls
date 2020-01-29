@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ellgroup.c                                      :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 21:16:44 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:16:47 by cdarci           ###   ########.fr       */
+/*   Created: 2019/09/03 13:39:42 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/06 19:34:05 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "libft.h"
 
-void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
+char	*ft_strdup(const char *s1)
 {
-	struct group *gr;
+	size_t	lenght;
+	char	*link;
+	int		i;
 
-	gr = getgrgid(gid);
-	if (gr->gr_name && !flags->numerically)
-		ft_printf("%-*s", width, gr->gr_name);
-	else
-		ft_printf("%-*d", width, gid);
-	ft_printf(" ");
+	i = 0;
+	lenght = ft_strlen(s1);
+	if (!(link = ft_strnew(lenght)))
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		link[i] = s1[i];
+		i++;
+	}
+	link[i] = '\0';
+	return (link);
 }

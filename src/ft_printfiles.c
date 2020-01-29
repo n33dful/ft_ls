@@ -23,9 +23,9 @@ void	ft_printfiles(t_list *files, t_flags *flags)
 		while (files)
 		{
 			about = files->content;
-			if (flags->color && (about->st_mode & S_IFDIR) == 0040000)
+			if (flags->color && (about->st_mode & S_IFMT) == S_IFDIR)
 				ft_printf("\033[34m%s\033[0m\n", about->d_name);
-			else if (flags->color && (about->st_mode & S_IFLNK) == 0120000)
+			else if (flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
 				ft_printf("\033[35m%s\033[0m\n", about->d_name);
 			else if (flags->color && (about->st_mode & S_IXUSR) == 0000100)
 				ft_printf("\033[31m%s\033[0m\n", about->d_name);

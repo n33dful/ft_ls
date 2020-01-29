@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ellgroup.c                                      :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 21:16:44 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:16:47 by cdarci           ###   ########.fr       */
+/*   Created: 2019/09/05 17:59:54 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/26 21:11:17 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#ifndef T_LIST_H
+# define T_LIST_H
 
-void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
+/*
+** ------------------------- Structure Definition ------------------------------
+*/
+
+typedef struct		s_list
 {
-	struct group *gr;
+	void			*content;
+	unsigned long	content_size;
+	struct s_list	*next;
+}					t_list;
 
-	gr = getgrgid(gid);
-	if (gr->gr_name && !flags->numerically)
-		ft_printf("%-*s", width, gr->gr_name);
-	else
-		ft_printf("%-*d", width, gid);
-	ft_printf(" ");
-}
+#endif

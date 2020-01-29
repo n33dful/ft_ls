@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ellgroup.c                                      :+:      :+:    :+:   */
+/*   pf_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 21:16:44 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:16:47 by cdarci           ###   ########.fr       */
+/*   Created: 2020/01/26 21:13:26 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/26 21:13:27 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
+#include "libftprintf.h"
 
-void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
+size_t	pf_putstr(char const *s, size_t len)
 {
-	struct group *gr;
+	size_t	l;
 
-	gr = getgrgid(gid);
-	if (gr->gr_name && !flags->numerically)
-		ft_printf("%-*s", width, gr->gr_name);
-	else
-		ft_printf("%-*d", width, gid);
-	ft_printf(" ");
+	l = 0;
+	if (s)
+	{
+		l = ft_strlen(s);
+		if (len > l)
+		{
+			write(1, s, l);
+			return (l);
+		}
+		else
+		{
+			write(1, s, len);
+			return (len);
+		}
+	}
+	return (0);
 }

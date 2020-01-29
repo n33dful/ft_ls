@@ -25,32 +25,38 @@ static int	ft_illegal(char ill, char *available)
 
 static void	ft_setbase(t_flags *flags)
 {
-	flags->recursively = 0;
 	flags->all = 0;
-	flags->ell = 0;
-	flags->reverse = 0;
-	flags->time = 0;
-	flags->size = 0;
-	flags->single = 0;
 	flags->color = 0;
+	flags->ell = 0;
+	flags->numerically = 0;
+	flags->recursively = 0;
+	flags->reverse = 0;
+	flags->single = 0;
+	flags->size = 0;
+	flags->time = 0;
 }
 
-static void	ft_setnew(char *fl, t_flags *flags)
+static void	ft_setnew(char fl, t_flags *flags)
 {
-	if (*fl == 'R')
+	if (fl == 'R')
 		flags->recursively = 1;
-	else if (*fl == 'a')
+	else if (fl == 'a')
 		flags->all = 1;
-	else if (*fl == 'l')
+	else if (fl == 'l')
 		flags->ell = 1;
-	else if (*fl == 'r')
+	else if (fl == 'r')
 		flags->reverse = 1;
-	else if (*fl == 't')
+	else if (fl == 't')
 		flags->time = 1;
-	else if (*fl == 'S')
+	else if (fl == 'S')
 		flags->size = 1;
-	else if (*fl == 'G')
+	else if (fl == 'G')
 		flags->color = 1;
+	else if (fl == 'n')
+	{
+		flags->numerically = 1;
+		flags->ell = 1;
+	}
 }
 
 int			ft_setflags(int argc, char **argv, t_flags *flags)
@@ -74,7 +80,7 @@ int			ft_setflags(int argc, char **argv, t_flags *flags)
 		{
 			if (!(fl = ft_strchr(available, argv[i][j])))
 				return (ft_illegal(argv[i][j], available));
-			ft_setnew(fl, flags);
+			ft_setnew(*fl, flags);
 			j++;
 		}
 		i++;

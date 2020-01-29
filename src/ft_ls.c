@@ -58,5 +58,5 @@ void		ft_ls(char *direct, t_flags *flags)
 	ft_printfiles(files, flags);
 	if (flags->recursively)
 		ft_recursively(direct, flags, files);
-	ft_lstdel(&files, del);
+	ft_lstdel(&files, lstdel_struct);
 }

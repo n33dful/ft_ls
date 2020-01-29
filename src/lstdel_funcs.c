@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ellgroup.c                                      :+:      :+:    :+:   */
+/*   del.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 21:16:44 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:16:47 by cdarci           ###   ########.fr       */
+/*   Created: 2020/01/26 21:16:38 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/26 21:16:41 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	ft_ellgroup(int width, gid_t gid, t_flags *flags)
+void	lstdel_struct(void *content, size_t content_size)
 {
-	struct group *gr;
+	t_about	*about;
 
-	gr = getgrgid(gid);
-	if (gr->gr_name && !flags->numerically)
-		ft_printf("%-*s", width, gr->gr_name);
-	else
-		ft_printf("%-*d", width, gid);
-	ft_printf(" ");
+	about = NULL;
+	if (content_size > 0)
+	{
+		about = content;
+		ft_strdel(&(about->full_path));
+		ft_strdel(&(about->d_name));
+		ft_memdel(&content);
+		about = NULL;
+	}
+}
+
+void	lstdel_string(void *content, size_t content_size)
+{
+	if (content_size > 0)
+		ft_memdel(&content);
 }

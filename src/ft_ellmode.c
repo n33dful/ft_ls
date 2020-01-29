@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static void	ft_printacl(t_about *about)
+static void	ft_acl(t_about *about)
 {
 	acl_t		acl;
 	acl_entry_t	dummy;
@@ -37,6 +37,53 @@ static void	ft_printacl(t_about *about)
 		ft_printf(" ");
 }
 
+static void	ft_ownerperm(t_about *about)
+{
+	ft_printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
+	ft_printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
+	if (!(about->st_mode & S_IRWXU) && \
+!(about->st_mode & S_IXUSR) && about->st_mode & S_ISUID)
+		ft_printf("S");
+	else if (about->st_mode & S_IRWXU && \
+about->st_mode & S_IXUSR && about->st_mode & S_ISUID)
+		ft_printf("s");
+	else if (about->st_mode & S_IXGRP)
+		ft_printf("x");
+	else
+		ft_printf("-");
+}
+
+static void	ft_groupperm(t_about *about)
+{
+	ft_printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
+	ft_printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
+	if (!(about->st_mode & S_IRWXG) && \
+!(about->st_mode & S_IXGRP) && about->st_mode & S_ISGID)
+		ft_printf("S");
+	else if (about->st_mode & S_IRWXG && \
+about->st_mode & S_IXGRP && about->st_mode & S_ISGID)
+		ft_printf("s");
+	else if (about->st_mode & S_IXGRP)
+		ft_printf("x");
+	else
+		ft_printf("-");
+}
+
+static void	ft_otherperm(t_about *about)
+{
+	ft_printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
+	ft_printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
+	if (about->st_mode & S_ISVTX && !(about->st_mode & S_IXUSR) && \
+!(about->st_mode & S_IXGRP)  && !(about->st_mode & S_IXOTH))
+		ft_printf("T");
+	else if (about->st_mode & S_ISVTX)
+		ft_printf("t");
+	else if (about->st_mode & S_IXOTH)
+		ft_printf("x");
+	else
+		ft_printf("-");
+}
+
 void		ft_ellmode(t_about *about)
 {
 	if ((about->st_mode & S_IFMT) == S_IFBLK)
@@ -53,15 +100,9 @@ void		ft_ellmode(t_about *about)
 		ft_printf("p");
 	else if ((about->st_mode & S_IFMT) == S_IFREG)
 		ft_printf("-");
-	ft_printf("%c", (about->st_mode & S_IRUSR) ? 'r' : '-');
-	ft_printf("%c", (about->st_mode & S_IWUSR) ? 'w' : '-');
-	ft_printf("%c", (about->st_mode & S_IXUSR) ? 'x' : '-');
-	ft_printf("%c", (about->st_mode & S_IRGRP) ? 'r' : '-');
-	ft_printf("%c", (about->st_mode & S_IWGRP) ? 'w' : '-');
-	ft_printf("%c", (about->st_mode & S_IXGRP) ? 'x' : '-');
-	ft_printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
-	ft_printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
-	ft_printf("%c", (about->st_mode & S_IXOTH) ? 'x' : '-');
-	ft_printacl(about);
+	ft_ownerperm(about);
+	ft_groupperm(about);
+	ft_otherperm(about);
+	ft_acl(about);
 	ft_printf(" ");
 }

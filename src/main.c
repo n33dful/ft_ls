@@ -24,25 +24,15 @@ static int		errsort(t_list *curr, t_list *next)
 	return (0);
 }
 
-static void		errdel(void *content, size_t content_size)
-{
-	if (content_size > 0)
-		ft_memdel(&content);
-}
-
-static void		ft_printerrors(t_list *lst)
+static void		lstprint_errors(t_list *lst)
 {
 	char	*str;
 
-	while (lst)
-	{
-		str = lst->content;
-		ft_putstr_fd("ls: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(2), 2);
-		lst = lst->next;
-	}
+	str = lst->content;
+	ft_putstr_fd("ls: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(2), 2);
 }
 
 static void		ft_errors(char *argv, t_list **errlst)
@@ -54,7 +44,7 @@ static void		ft_errors(char *argv, t_list **errlst)
 	{
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
-			ft_lstdel(errlst, errdel);
+			ft_lstdel(errlst, lstdel_string);
 			return ;
 		}
 		ft_lstadd(errlst, new);
@@ -95,13 +85,15 @@ static void		ft_single(char *argv, t_flags *flags, t_list **sinlst)
 	struct stat	st;
 	t_list		*new;
 
-	if (lstat(argv, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFREG || (st.st_mode & S_IFMT) == S_IFLNK))
+	if (lstat(argv, &st) == 0 && \
+((st.st_mode & S_IFMT) == S_IFREG || (st.st_mode & S_IFMT) == S_IFLNK))
 	{
-		if ((st.st_mode & S_IFMT) == S_IFLNK && stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR)
+		if ((st.st_mode & S_IFMT) == S_IFLNK && \
+stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR)
 			return ;
 		if (!(new = ft_singlefile(argv)))
 		{
-			ft_lstdel(sinlst, del);
+			ft_lstdel(sinlst, lstdel_struct);
 			return ;
 		}
 		ft_lstadd(sinlst, new);
@@ -118,20 +110,12 @@ static void		ft_dirlst(char *argv, t_list **dirs)
 	{
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
-			ft_lstdel(dirs, errdel);
+			ft_lstdel(dirs, lstdel_string);
 			return ;
 		}
 		ft_lstadd(dirs, new);
 	}
 	ft_lstsort(dirs, errsort);
-}
-
-void			aaa()
-{
-	ft_putstr_fd("ls: ", 2);
-	ft_putstr_fd("fts_open", 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerror(2), 2);
 }
 
 static void		ft_printall(t_all *all, t_flags *flags)
@@ -140,16 +124,13 @@ static void		ft_printall(t_all *all, t_flags *flags)
 	size_t	count;
 	size_t	size;
 
-	//if (all->errors && !all->singles && !all->dirs)
-	//	aaa();
-	//else
-		ft_printerrors(all->errors);
+	ft_lstiter(all->errors, &lstprint_errors);
 	flags->single = 1;
 	ft_printfiles(all->singles, flags);
 	flags->single = 0;
-	point = all->dirs;
 	count = 0;
 	size = ft_lstlen(all->dirs);
+	point = all->dirs;
 	while (point)
 	{
 		if (count == 0 && ((!all->singles && size != 1) || (all->errors && !all->singles)))
@@ -161,88 +142,17 @@ static void		ft_printall(t_all *all, t_flags *flags)
 		point = point->next;
 		count++;
 	}
-	//count = 0;
-	//size = ft_lstlen(all->denied);
-	//point = all->denied;
-	//while (point)
-	//{
-	//	if (count == 0 && !all->errors && !all->singles && size != 1)
-	//		ft_printf("%s:\n", point->content);
-	//	else if (all->errors || all->singles || (count < size && size != 1))
-	//		ft_printf("\n%s:\n", point->content);
-	//	ft_ls(point->content, flags);
-	//	point = point->next;
-	//	count++;
-	//}
-	ft_lstdel(&all->errors, errdel);
-	ft_lstdel(&all->singles, del);
-	ft_lstdel(&all->dirs, errdel);
-	//ft_lstdel(&all->denied, errdel);
+	ft_lstdel(&all->errors, lstdel_string);
+	ft_lstdel(&all->singles, lstdel_struct);
+	ft_lstdel(&all->dirs, lstdel_string);
 }
-
-//static void		ft_denied(char *argv, t_list **dirs)
-//{
-//	DIR		*dir;
-//	t_list	*new;
-//
-//	if (!(dir = opendir(argv)) && errno == EACCES)
-//	{
-//		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
-//		{
-//			ft_lstdel(dirs, errdel);
-//			return ;
-//		}
-//		ft_lstadd(dirs, new);
-//	}
-//	if (dir)
-//		closedir(dir);
-//	ft_lstsort(dirs, errsort);
-//}
 
 static void		ft_allbase(t_all *all)
 {
 	all->errors = NULL;
 	all->singles = NULL;
 	all->dirs = NULL;
-	//all->denied = NULL;
 }
-
-//static void		ft_lstaddtail(t_list **alst, t_list *new)
-//{
-//	t_list	*point;
-//
-//	point = (*alst);
-//	if (!point)
-//	{
-//		(*alst) = new;
-//		return ;
-//	}
-//	while (point->next)
-//		point = point->next;
-//	point->next = new;
-//}
-//
-//static t_list	*ft_lstfromargv(char **argv)
-//{
-//	t_list	*list;
-//	t_list	*new;
-//	size_t	i;
-//
-//	i = 0;
-//	list = NULL;
-//	while (argv[i])
-//	{
-//		if (!(new = ft_lstnew(argv[i], ft_strlen(argv[i]) + 1)))
-//		{
-//			ft_lstdel(&list, errdel);
-//			return (NULL);
-//		}
-//		ft_lstaddtail(&list, new);
-//		i++;
-//	}
-//	ft_lstsort(&list, errsort);
-//	return (list);
-//}
 
 int				main(int argc, char **argv)
 {
@@ -260,7 +170,6 @@ int				main(int argc, char **argv)
 			ft_errors(argv[i], &all.errors);
 			ft_single(argv[i], &flags, &all.singles);
 			ft_dirlst(argv[i], &all.dirs);
-			//ft_denied(argv[i], &all.denied);
 			errno = 0;
 			i++;
 		}

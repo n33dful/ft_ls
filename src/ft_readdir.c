@@ -24,6 +24,13 @@ static int	ft_setfullpath(struct dirent *dirent, char *direct, t_about *about)
 	return (1);
 }
 
+static void	*ft_memerror(t_list **files, DIR *dir)
+{
+	ft_lstdel(files, lstdel_struct);
+	closedir(dir);
+	return (NULL);
+}
+
 static int	ft_setdirent(struct dirent *dirent, t_about *about)
 {
 	if (!(about->d_name = ft_strdup(dirent->d_name)))

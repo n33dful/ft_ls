@@ -28,7 +28,7 @@ static int	ft_findcolwlinks(t_list *files)
 	return (ft_numlen(colw));
 }
 
-static int	ft_findcolwuser(t_list *files)
+static int	ft_findcolwuser(t_list *files, t_flags *flags)
 {
 	t_about			*about;
 	struct passwd	*passwd;
@@ -39,7 +39,7 @@ static int	ft_findcolwuser(t_list *files)
 	{
 		about = files->content;
 		passwd = getpwuid(about->st_uid);
-		if (passwd->pw_name)
+		if (passwd->pw_name && !flags->numerically)
 		{
 			if ((int)ft_strlen(passwd->pw_name) > colw)
 				colw = ft_strlen(passwd->pw_name);
@@ -54,7 +54,7 @@ static int	ft_findcolwuser(t_list *files)
 	return (colw + 1);
 }
 
-static int	ft_findcolwgroup(t_list *files)
+static int	ft_findcolwgroup(t_list *files, t_flags *flags)
 {
 	t_about			*about;
 	struct group	*group;
@@ -65,7 +65,7 @@ static int	ft_findcolwgroup(t_list *files)
 	{
 		about = files->content;
 		group = getgrgid(about->st_gid);
-		if (group->gr_name)
+		if (group->gr_name && !flags->numerically)
 		{
 			if ((int)ft_strlen(group->gr_name) > colw)
 				colw = ft_strlen(group->gr_name);
@@ -98,16 +98,16 @@ static int	ft_findcolwsize(t_list *files)
 
 void		ft_longformat(t_list *files, t_flags *flags)
 {
-	t_about			*about;
-	int				uwidth;
-	int				gwidth;
-	int				lwidth;
-	int				swidth;
+	t_about	*about;
+	int		uwidth;
+	int		gwidth;
+	int		lwidth;
+	int		swidth;
 
 	swidth = ft_findcolwsize(files);
 	lwidth = ft_findcolwlinks(files);
-	uwidth = ft_findcolwuser(files);
-	gwidth = ft_findcolwgroup(files);
+	uwidth = ft_findcolwuser(files, flags);
+	gwidth = ft_findcolwgroup(files, flags);
 	if (!flags->single && ft_lstlen(files) != 0)
 		ft_printf("total %lld\n", ft_elltotal(files));
 	while (files)
@@ -115,8 +115,8 @@ void		ft_longformat(t_list *files, t_flags *flags)
 		about = files->content;
 		ft_ellmode(about);
 		ft_printf("%*d ", lwidth, about->st_nlink);
-		ft_elluser(uwidth, about->st_uid);
-		ft_ellgroup(gwidth, about->st_gid);
+		ft_elluser(uwidth, about->st_uid, flags);
+		ft_ellgroup(gwidth, about->st_gid, flags);
 		ft_printf("%*lld ", swidth, about->st_size);
 		ft_elltime(about);
 		ft_ellname(about, flags);

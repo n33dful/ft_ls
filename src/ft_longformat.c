@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:17:46 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 20:14:51 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/30 19:29:34 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	ft_findcolwlinks(t_list *files)
 {
 	t_aboutfile	*about;
-	int		colw;
+	int			colw;
 
 	colw = 0;
 	while (files)
@@ -30,7 +30,7 @@ static int	ft_findcolwlinks(t_list *files)
 
 static int	ft_findcolwuser(t_list *files, t_lsflags *flags)
 {
-	t_aboutfile			*about;
+	t_aboutfile		*about;
 	struct passwd	*passwd;
 	int				colw;
 
@@ -56,7 +56,7 @@ static int	ft_findcolwuser(t_list *files, t_lsflags *flags)
 
 static int	ft_findcolwgroup(t_list *files, t_lsflags *flags)
 {
-	t_aboutfile			*about;
+	t_aboutfile		*about;
 	struct group	*group;
 	int				colw;
 
@@ -83,7 +83,7 @@ static int	ft_findcolwgroup(t_list *files, t_lsflags *flags)
 static int	ft_findcolwsize(t_list *files)
 {
 	t_aboutfile	*about;
-	int		colw;
+	int			colw;
 
 	colw = 0;
 	while (files)
@@ -99,10 +99,10 @@ static int	ft_findcolwsize(t_list *files)
 void		ft_longformat(t_list *files, t_lsflags *flags)
 {
 	t_aboutfile	*about;
-	int		uwidth;
-	int		gwidth;
-	int		lwidth;
-	int		swidth;
+	int			uwidth;
+	int			gwidth;
+	int			lwidth;
+	int			swidth;
 
 	swidth = ft_findcolwsize(files);
 	lwidth = ft_findcolwlinks(files);

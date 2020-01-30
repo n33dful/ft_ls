@@ -6,13 +6,14 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:11 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 20:03:22 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/30 19:28:02 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int	ft_setfullpath(struct dirent *dirent, char *direct, t_aboutfile *about)
+static int	ft_setfullpath(struct dirent *dirent, char *direct, \
+t_aboutfile *about)
 {
 	if (ft_strcmp(direct, "."))
 	{
@@ -61,7 +62,7 @@ t_list		*ft_readdir(char *direct, t_lsflags *flags)
 	DIR				*dir;
 	t_list			*files;
 	t_list			*new;
-	t_aboutfile			about;
+	t_aboutfile		about;
 	struct dirent	*dirent;
 
 	files = NULL;

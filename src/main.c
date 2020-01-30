@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:49 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 19:48:07 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/30 19:45:15 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				main(int argc, char **argv)
 		{
 			ft_create_error_list(argv[i], &all.errors);
 			ft_create_file_list(argv[i], &flags, &all.singles);
-			ft_create_folder_list(argv[i], &all.dirs);
+			ft_create_folder_list(argv[i], &flags, &all.dirs);
 			i++;
 		}
 		ft_printall(&all, &flags);

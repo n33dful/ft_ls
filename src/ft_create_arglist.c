@@ -15,7 +15,7 @@ static int		errsort(t_list *curr, t_list *next)
 
 static t_list	*ft_singlefile(char *filename)
 {
-	t_aboutfile		about;
+	t_aboutfile	about;
 	t_list		*file;
 	struct stat	st;
 
@@ -58,7 +58,8 @@ void			ft_create_error_list(char *argv, t_list **errlst)
 	errno = 0;
 }
 
-void			ft_create_file_list(char *argv, t_lsflags *flags, t_list **sinlst)
+void			ft_create_file_list(char *argv, t_lsflags *flags, \
+t_list **sinlst)
 {
 	struct stat	stdir;
 	struct stat	st;
@@ -68,7 +69,7 @@ void			ft_create_file_list(char *argv, t_lsflags *flags, t_list **sinlst)
 ((st.st_mode & S_IFMT) == S_IFREG || (st.st_mode & S_IFMT) == S_IFLNK))
 	{
 		if ((st.st_mode & S_IFMT) == S_IFLNK && \
-stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR)
+stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR && !flags->ell)
 			return ;
 		if (!(new = ft_singlefile(argv)))
 		{
@@ -81,13 +82,17 @@ stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR)
 	errno = 0;
 }
 
-void			ft_create_folder_list(char *argv, t_list **dirs)
+void			ft_create_folder_list(char *argv, t_lsflags *flags, \
+t_list **dirs)
 {
 	struct stat	st;
 	t_list		*new;
 
 	if (stat(argv, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR)
 	{
+		lstat(argv, &st);
+		if ((st.st_mode & S_IFMT) == S_IFLNK && flags->ell)
+			return ;
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
 			ft_lstdel(dirs, lstdel_string);

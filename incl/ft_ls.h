@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:13 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 13:37:18 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/30 19:45:44 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,6 @@ void				lstdel_string(void *content, size_t content_size);
 
 void				ft_create_error_list(char *argv, t_list **errlst);
 void				ft_create_file_list(char *argv, t_lsflags *flags, t_list **sinlst);
-void				ft_create_folder_list(char *argv, t_list **dirs);
+void				ft_create_folder_list(char *argv, t_lsflags *flags, t_list **dirs);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:23:24 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:23:27 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/30 19:34:16 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	ft_otherperm(t_aboutfile *about)
 	ft_printf("%c", (about->st_mode & S_IROTH) ? 'r' : '-');
 	ft_printf("%c", (about->st_mode & S_IWOTH) ? 'w' : '-');
 	if (about->st_mode & S_ISVTX && !(about->st_mode & S_IXUSR) && \
-!(about->st_mode & S_IXGRP)  && !(about->st_mode & S_IXOTH))
+!(about->st_mode & S_IXGRP) && !(about->st_mode & S_IXOTH))
 		ft_printf("T");
 	else if (about->st_mode & S_ISVTX)
 		ft_printf("t");

@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:02 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/27 20:03:30 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/30 19:29:05 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	ft_recursively(char *direct, t_lsflags *flags, t_list *files)
 {
-	char	*nextdirect;
+	char		*nextdirect;
 	t_aboutfile	*about;
 
 	while (files)

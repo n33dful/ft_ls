@@ -35,22 +35,31 @@
 ** ------------------------- Structure Definition ------------------------------
 */
 
+typedef struct		s_table
+{
+	int				filesize_colwidth;
+	int				group_colwidth;
+	int				links_colwidth;
+	int				user_colwidth;
+}					t_table;
+
 typedef struct		s_lsflags
 {
 	int				all;
 	int				color;
 	int				ell;
+	int				group_only;
+	int				in_line;
+	int				not_sorted;
 	int				numerically;
 	int				recursively;
 	int				reverse;
 	int				single;
 	int				size;
-	int				time;
-	int				group_only;
-	int				in_line;
-	int				not_sorted;
 	int				slash;
+	int				time;
 	int				user_only;
+	t_table			*talbe_width;
 }					t_lsflags;
 
 typedef struct		s_aboutfile
@@ -64,6 +73,7 @@ typedef struct		s_aboutfile
 	mode_t			st_mode;
 	nlink_t			st_nlink;
 	off_t			st_size;
+	t_lsflags		*flags;
 	uid_t			st_uid;
 }					t_aboutfile;
 

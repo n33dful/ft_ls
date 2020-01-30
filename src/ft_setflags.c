@@ -39,6 +39,7 @@ static void	ft_nullifyflags(t_lsflags *flags)
 	flags->not_sorted = 0;
 	flags->slash = 0;
 	flags->user_only = 0;
+	flags->talbe_width = NULL;
 }
 
 static void	ft_setcurrentflag_parttwo(char fl, t_lsflags *flags)

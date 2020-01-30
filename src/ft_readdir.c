@@ -39,12 +39,12 @@ static int	ft_setdirent(struct dirent *dirent, t_aboutfile *about)
 	return (1);
 }
 
-static int	ft_setstat(struct dirent *dirent, t_aboutfile *about)
+static int	ft_setstat(t_lsflags *flags, t_aboutfile *about)
 {
 	struct stat	st;
 
 	if ((lstat(about->full_path ? \
-about->full_path : dirent->d_name, &st)) != 0)
+about->full_path : about->d_name, &st)) != 0)
 		return (0);
 	about->st_gid = st.st_gid;
 	about->st_mode = st.st_mode;
@@ -54,6 +54,7 @@ about->full_path : dirent->d_name, &st)) != 0)
 	about->m_time = st.st_mtimespec.tv_sec;
 	about->st_size = st.st_size;
 	about->st_blocks = st.st_blocks;
+	about->flags = flags;
 	return (1);
 }
 
@@ -76,7 +77,7 @@ t_list		*ft_readdir(char *direct, t_lsflags *flags)
 			return (ft_memerror(&files, dir));
 		if (!ft_setdirent(dirent, &about))
 			return (ft_memerror(&files, dir));
-		if (!ft_setstat(dirent, &about))
+		if (!ft_setstat(flags, &about))
 			return (ft_memerror(&files, dir));
 		if (!(new = ft_lstnew(&about, sizeof(t_aboutfile))))
 			return (ft_memerror(&files, dir));

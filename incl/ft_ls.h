@@ -41,6 +41,7 @@ typedef struct		s_table
 	int				group_colwidth;
 	int				links_colwidth;
 	int				user_colwidth;
+	blkcnt_t		total_blkcntsize;
 }					t_table;
 
 typedef struct		s_lsflags
@@ -93,17 +94,6 @@ typedef struct		s_all
 void				ft_ls(char *direct, t_lsflags *flags);
 
 /*
-** ------------------------------ Sort Functions -------------------------------
-*/
-
-int					by_name_asc(t_list *current, t_list *next);
-int					by_name_desc(t_list *current, t_list *next);
-int					by_size_asc(t_list *current, t_list *next);
-int					by_size_desc(t_list *current, t_list *next);
-int					by_time_asc(t_list *current, t_list *next);
-int					by_time_desc(t_list *current, t_list *next);
-
-/*
 ** ----------------------------- ft_ls Functions -------------------------------
 */
 
@@ -113,17 +103,16 @@ char				*ft_permissions(t_aboutfile *about);
 int					ft_numlen(long long n);
 int					ft_setflags(int argc, char **argv, t_lsflags *flags);
 t_list				*ft_readdir(char *direct, t_lsflags *flags);
-void				lstdel_struct(void *content, size_t content_size);
 void				ft_ellgroup(int width, gid_t gid, t_lsflags *flags);
 void				ft_ellmode(t_aboutfile *about);
 void				ft_ellname(t_aboutfile *about, t_lsflags *flags);
 void				ft_elltime(t_aboutfile *about);
 void				ft_elluser(int width, uid_t uid, t_lsflags *flags);
-void				ft_longformat(t_list *files, t_lsflags *flags);
-void				ft_printfiles(t_list *files, t_lsflags *flags);
-void				ft_sortfiles(t_list **files, t_lsflags *flags);
-void				lstdel_string(void *content, size_t content_size);
+void				ft_longformat(t_list *files);
+void				ft_printfiles(t_list *files);
 
+void				lstdel_func(void *content, size_t content_size);
+int					lstsort_func(t_list *current, t_list *next);
 void				ft_create_error_list(char *argv, t_list **errlst);
 void				ft_create_file_list(char *argv, t_lsflags *flags, t_list **sinlst);
 void				ft_create_folder_list(char *argv, t_lsflags *flags, t_list **dirs);

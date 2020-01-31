@@ -13,7 +13,7 @@ static int		errsort(t_list *curr, t_list *next)
 	return (0);
 }
 
-static t_list	*ft_singlefile(char *filename)
+static t_list	*ft_singlefile(char *filename, t_lsflags *flags)
 {
 	t_aboutfile	about;
 	t_list		*file;
@@ -32,6 +32,7 @@ static t_list	*ft_singlefile(char *filename)
 	about.m_time = st.st_mtimespec.tv_sec;
 	about.st_size = st.st_size;
 	about.st_blocks = st.st_blocks;
+	about.flags = flags;
 	if (!(file = ft_lstnew(&about, sizeof(t_aboutfile))))
 	{
 		ft_strdel(&(about.d_name));
@@ -49,7 +50,7 @@ void			ft_create_error_list(char *argv, t_list **errlst)
 	{
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
-			ft_lstdel(errlst, lstdel_string);
+			ft_lstdel(errlst, lstdel_func);
 			return ;
 		}
 		ft_lstadd_back(errlst, new);
@@ -71,14 +72,14 @@ t_list **sinlst)
 		if ((st.st_mode & S_IFMT) == S_IFLNK && \
 stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR && !flags->ell)
 			return ;
-		if (!(new = ft_singlefile(argv)))
+		if (!(new = ft_singlefile(argv, flags)))
 		{
-			ft_lstdel(sinlst, lstdel_struct);
+			ft_lstdel(sinlst, lstdel_func);
 			return ;
 		}
 		ft_lstadd_back(sinlst, new);
 	}
-	ft_sortfiles(sinlst, flags);
+	ft_lstsort(sinlst, lstsort_func);
 	errno = 0;
 }
 
@@ -95,7 +96,7 @@ t_list **dirs)
 			return ;
 		if (!(new = ft_lstnew(argv, ft_strlen(argv) + 1)))
 		{
-			ft_lstdel(dirs, lstdel_string);
+			ft_lstdel(dirs, lstdel_func);
 			return ;
 		}
 		ft_lstadd_back(dirs, new);

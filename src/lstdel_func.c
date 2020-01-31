@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_elltotal.c                                      :+:      :+:    :+:   */
+/*   lstdel_func.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/26 21:17:01 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:17:04 by cdarci           ###   ########.fr       */
+/*   Created: 2020/01/26 21:16:38 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/26 21:16:41 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-blkcnt_t	ft_elltotal(t_list *files)
+void	lstdel_func(void *content, size_t content_size)
 {
-	t_aboutfile		*about;
-	blkcnt_t	total;
+	t_aboutfile	*about;
 
-	total = 0;
-	while (files)
+	about = NULL;
+	if (content_size == 72)
 	{
-		about = files->content;
-		total += about->st_blocks;
-		files = files->next;
+		about = content;
+		ft_strdel(&(about->full_path));
+		ft_strdel(&(about->d_name));
+		ft_memdel(&content);
+		about = NULL;
 	}
-	return (total);
+	else
+		ft_memdel(&content);
 }

@@ -17,25 +17,17 @@ DIR_S=src
 DIR_O=temp
 HEADER=incl
 SOURCES=ft_create_arglist.c\
-main.c\
-ft_setflags.c\
-ft_readdir.c\
-ft_sortfiles.c\
-ft_printfiles.c\
 ft_fullpath.c\
-lstdel_funcs.c\
+ft_longaboutfile.c\
+ft_longfilemode.c\
+ft_ls.c\
 ft_numlen.c\
-lstsort_byname.c\
-lstsort_bytime.c\
-lstsort_bysize.c\
-ft_longformat.c\
-ft_elltotal.c\
-ft_ellgroup.c\
-ft_elluser.c \
-ft_elltime.c\
-ft_ellname.c\
-ft_ellmode.c\
-ft_ls.c
+ft_printfiles.c\
+ft_readdir.c\
+ft_setflags.c\
+lstdel_func.c\
+lstsort_func.c\
+main.c
 SRCS=$(addprefix $(DIR_S)/,$(SOURCES))
 OBJS=$(addprefix $(DIR_O)/,$(SOURCES:.c=.o))
 

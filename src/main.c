@@ -29,9 +29,9 @@ static void		ft_printall(t_all *all, t_lsflags *flags)
 	size_t	count;
 	size_t	size;
 
-	ft_lstiter(all->errors, &lstprint_errors);
+	ft_lstiter(all->errors, lstprint_errors);
 	flags->single = 1;
-	ft_printfiles(all->singles, flags);
+	ft_printfiles(all->singles);
 	flags->single = 0;
 	count = 0;
 	size = ft_lstlen(all->dirs);
@@ -47,16 +47,30 @@ static void		ft_printall(t_all *all, t_lsflags *flags)
 		point = point->next;
 		count++;
 	}
-	ft_lstdel(&all->errors, lstdel_string);
-	ft_lstdel(&all->singles, lstdel_struct);
-	ft_lstdel(&all->dirs, lstdel_string);
+	ft_lstdel(&all->errors, lstdel_func);
+	ft_lstdel(&all->singles, lstdel_func);
+	ft_lstdel(&all->dirs, lstdel_func);
 }
+
+//static t_list	*ft_lstarg(int i, int argc, char **argv)
+//{
+//	t_list	*list;
+//	t_list	*new;
+//
+//	list = NULL;
+//	while (i < argc)
+//	{
+//		
+//		i++;
+//	}
+//	return (list);
+//}
 
 int				main(int argc, char **argv)
 {
-	t_all	all;
+	t_all		all;
 	t_lsflags	flags;
-	int		i;
+	int			i;
 
 	all.errors = NULL;
 	all.singles = NULL;

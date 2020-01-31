@@ -18,9 +18,9 @@ void	ft_lstmove(t_list **alst, void (*del)(void *, size_t))
 
 	if (alst && del)
 	{
-		current = *alst;
+		current = (*alst);
 		del(current->content, current->content_size);
-		*alst = (*alst)->next;
+		(*alst) = (*alst)->next;
 		free(current);
 		current = NULL;
 	}

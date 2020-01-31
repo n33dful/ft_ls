@@ -54,9 +54,9 @@ void		ft_ls(char *direct, t_lsflags *flags)
 	errno = 0;
 	if (!(files = ft_readdir(direct, flags)) && errno != 0)
 		return (ft_error(direct));
-	ft_sortfiles(&files, flags);
-	ft_printfiles(files, flags);
+	ft_lstsort(&files, lstsort_func);
+	ft_printfiles(files);
 	if (flags->recursively)
 		ft_recursively(direct, flags, files);
-	ft_lstdel(&files, lstdel_struct);
+	ft_lstdel(&files, lstdel_func);
 }

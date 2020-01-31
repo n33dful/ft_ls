@@ -36,6 +36,7 @@ ft_lstdelone.c\
 ft_lstiter.c\
 ft_lstlen.c\
 ft_lstmap.c\
+ft_lstmove.c\
 ft_lstnew.c\
 ft_lstsort.c\
 ft_memalloc.c\

@@ -24,15 +24,7 @@ static t_list	*ft_singlefile(char *filename, t_lsflags *flags)
 	if (!(about.d_name = ft_strdup(filename)))
 		return (NULL);
 	about.full_path = NULL;
-	about.st_gid = st.st_gid;
-	about.st_mode = st.st_mode;
-	about.st_nlink = st.st_nlink;
-	about.st_uid = st.st_uid;
-	about.c_time = st.st_ctimespec.tv_sec;
-	about.m_time = st.st_mtimespec.tv_sec;
-	about.st_size = st.st_size;
-	about.st_blocks = st.st_blocks;
-	about.flags = flags;
+	ft_statcpy(&about, flags, &st);
 	if (!(file = ft_lstnew(&about, sizeof(t_aboutfile))))
 	{
 		ft_strdel(&(about.d_name));

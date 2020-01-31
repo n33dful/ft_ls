@@ -53,26 +53,40 @@ void	ft_elltime(t_aboutfile *about)
 	ft_printf(" ");
 }
 
-void	ft_ellname(t_aboutfile *about, t_lsflags *flags)
+void	ft_printfilename(t_list *file)
 {
-	char	buf[1024];
-	char	*full;
-	ssize_t	rs;
+	t_aboutfile	*about;
+	t_lsflags	*flags;
 
-	full = about->full_path;
-	rs = readlink(full ? full : about->d_name, buf, 1024);
-	buf[rs] = '\0';
-	if (rs && flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
-		ft_printf("\033[35m%s\033[0m -> %s", about->d_name, buf);
-	else if (flags->color && (about->st_mode & S_IFMT) == S_IFDIR)
+	about = file->content;
+	flags = about->flags;
+	if (flags->color && (about->st_mode & S_IFMT) == S_IFDIR)
 		ft_printf("\033[34m%s\033[0m", about->d_name);
-	else if (flags->color && (about->st_mode & S_IFMT) == S_IXUSR)
+	else if (flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
+		ft_printf("\033[35m%s\033[0m", about->d_name);
+	else if (flags->color && (about->st_mode & S_IXUSR))
 		ft_printf("\033[31m%s\033[0m", about->d_name);
-	else if (rs && !flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
-		ft_printf("%s -> %s", about->d_name, buf);
 	else
 		ft_printf("%s", about->d_name);
 	if (flags->slash && (about->st_mode & S_IFMT) == S_IFDIR)
 		ft_printf("/");
+}
+
+void	ft_ellname(t_list *file)
+{
+	char		buf[1024];
+	t_aboutfile	*about;
+	t_lsflags	*flags;
+	char		*full;
+	ssize_t		rs;
+
+	about = file->content;
+	flags = about->flags;
+	full = about->full_path;
+	rs = readlink(full ? full : about->d_name, buf, 1024);
+	buf[rs] = '\0';
+	ft_printfilename(file);
+	if (rs && (about->st_mode & S_IFMT) == S_IFLNK)
+		ft_printf(" -> %s", buf);
 	ft_printf("\n");
 }

@@ -105,11 +105,13 @@ int					ft_setflags(int argc, char **argv, t_lsflags *flags);
 t_list				*ft_readdir(char *direct, t_lsflags *flags);
 void				ft_ellgroup(int width, gid_t gid, t_lsflags *flags);
 void				ft_ellmode(t_aboutfile *about);
-void				ft_ellname(t_aboutfile *about, t_lsflags *flags);
+void				ft_ellname(t_list *file);
 void				ft_elltime(t_aboutfile *about);
 void				ft_elluser(int width, uid_t uid, t_lsflags *flags);
 void				ft_longformat(t_list *files);
 void				ft_printfiles(t_list *files);
+void				ft_statcpy(t_aboutfile *about, t_lsflags *flags, struct stat *st);
+void				ft_printfilename(t_list *file);
 
 void				lstdel_func(void *content, size_t content_size);
 int					lstsort_func(t_list *current, t_list *next);

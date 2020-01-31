@@ -199,26 +199,12 @@ static void	lstprint_inlong(t_list *file)
 		ft_printf("  ");
 	ft_printf("%*lld ", table->filesize_colwidth, about->st_size);
 	ft_elltime(about);
-	ft_ellname(about, flags);
+	ft_ellname(file);
 }
 
 static void	lstprint_inline(t_list *file)
 {
-	t_aboutfile	*about;
-	t_lsflags	*flags;
-
-	about = file->content;
-	flags = about->flags;
-	if (flags->color && (about->st_mode & S_IFMT) == S_IFDIR)
-		ft_printf("\033[34m%s\033[0m", about->d_name);
-	else if (flags->color && (about->st_mode & S_IFMT) == S_IFLNK)
-		ft_printf("\033[35m%s\033[0m", about->d_name);
-	else if (flags->color && (about->st_mode & S_IXUSR))
-		ft_printf("\033[31m%s\033[0m", about->d_name);
-	else
-		ft_printf("%s", about->d_name);
-	if (flags->slash && (about->st_mode & S_IFMT) == S_IFDIR)
-		ft_printf("/");
+	ft_printfilename(file);
 	ft_printf("\n");
 }
 

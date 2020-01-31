@@ -36,6 +36,19 @@ static void	*ft_memerror(t_list **files, DIR *dir)
 	return (NULL);
 }
 
+void		ft_statcpy(t_aboutfile *about, t_lsflags *flags, struct stat *st)
+{
+	about->st_gid = st->st_gid;
+	about->st_mode = st->st_mode;
+	about->st_nlink = st->st_nlink;
+	about->st_uid = st->st_uid;
+	about->c_time = st->st_ctimespec.tv_sec;
+	about->m_time = st->st_mtimespec.tv_sec;
+	about->st_size = st->st_size;
+	about->st_blocks = st->st_blocks;
+	about->flags = flags;
+}
+
 static int	ft_setstat(t_lsflags *flags, t_aboutfile *about)
 {
 	struct stat	st;
@@ -43,15 +56,7 @@ static int	ft_setstat(t_lsflags *flags, t_aboutfile *about)
 	if ((lstat(about->full_path ? \
 about->full_path : about->d_name, &st)) != 0)
 		return (0);
-	about->st_gid = st.st_gid;
-	about->st_mode = st.st_mode;
-	about->st_nlink = st.st_nlink;
-	about->st_uid = st.st_uid;
-	about->c_time = st.st_ctimespec.tv_sec;
-	about->m_time = st.st_mtimespec.tv_sec;
-	about->st_size = st.st_size;
-	about->st_blocks = st.st_blocks;
-	about->flags = flags;
+	ft_statcpy(about, flags, &st);
 	return (1);
 }
 

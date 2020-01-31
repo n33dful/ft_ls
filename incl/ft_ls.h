@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:13 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/30 19:45:44 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/31 11:46:31 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,12 @@ typedef struct		s_all
 	t_list			*errors;
 	t_list			*singles;
 }					t_all;
+
+typedef struct		s_lsargs
+{
+	char			*filename;
+	t_lsflags		*flags;
+}					t_lsargs;
 
 /*
 ** -----------------------------------------------------------------------------

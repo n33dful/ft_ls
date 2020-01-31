@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:49 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/30 19:45:15 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/01/31 11:53:09 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,32 @@ static void		ft_printall(t_all *all, t_lsflags *flags)
 	ft_lstdel(&all->dirs, lstdel_func);
 }
 
-//static t_list	*ft_lstarg(int i, int argc, char **argv)
-//{
-//	t_list	*list;
-//	t_list	*new;
-//
-//	list = NULL;
-//	while (i < argc)
-//	{
-//		
-//		i++;
-//	}
-//	return (list);
-//}
+static t_list	*ft_lstarg(int i, int argc, char **argv, t_lsflags *flags)
+{
+	t_list		*list;
+	t_list		*new;
+	t_lsargs	lstargs;
+
+	list = NULL;
+	while (i < argc)
+	{
+		lstargs.filename = argv[i];
+		lstargs.flags = flags;
+		if (!(new = ft_lstnew(&lstargs, sizeof(t_lsargs))))
+		{
+			ft_lstdel(&list, lstdel_func);
+			return (NULL);
+		}
+		ft_lstadd_back(&list, new);
+		i++;
+	}
+	return (list);
+}
 
 int				main(int argc, char **argv)
 {
 	t_all		all;
+	t_list		*args;
 	t_lsflags	flags;
 	int			i;
 
@@ -79,8 +88,12 @@ int				main(int argc, char **argv)
 		return (1);
 	else if (i < argc)
 	{
+		args = ft_lstarg(i, argc, argv, &flags);
 		while (i < argc)
 		{
+			t_lsargs *arg = args->content;
+			if (!arg)
+				return (0);
 			ft_create_error_list(argv[i], &all.errors);
 			ft_create_file_list(argv[i], &flags, &all.singles);
 			ft_create_folder_list(argv[i], &flags, &all.dirs);

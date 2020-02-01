@@ -78,18 +78,12 @@ typedef struct		s_aboutfile
 	uid_t			st_uid;
 }					t_aboutfile;
 
-typedef struct		s_all
+typedef struct		s_allargs
 {
 	t_list			*dirs;
 	t_list			*errors;
 	t_list			*singles;
-}					t_all;
-
-typedef struct		s_lsargs
-{
-	char			*filename;
-	t_lsflags		*flags;
-}					t_lsargs;
+}					t_allargs;
 
 /*
 ** -----------------------------------------------------------------------------
@@ -121,8 +115,8 @@ void				ft_printfilename(t_list *file);
 
 void				lstdel_func(void *content, size_t content_size);
 int					lstsort_func(t_list *current, t_list *next);
-void				ft_create_error_list(char *argv, t_list **errlst);
-void				ft_create_file_list(char *argv, t_lsflags *flags, t_list **sinlst);
-void				ft_create_folder_list(char *argv, t_lsflags *flags, t_list **dirs);
+void				ft_addto_errorslist(char *argv, t_list **errlst);
+void				ft_addto_fileslist(char *argv, t_lsflags *flags, t_list **sinlst);
+void				ft_addto_dirslist(char *argv, t_lsflags *flags, t_list **dirs);
 
 #endif

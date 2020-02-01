@@ -12,11 +12,11 @@
 
 C=gcc
 NAME=ft_ls
-FLAGS=-g -Wall -Wextra -Werror
+FLAGS=-Wall -Wextra -Werror -O3
 DIR_S=src
 DIR_O=temp
 HEADER=incl
-SOURCES=ft_create_arglist.c\
+SOURCES=ft_addto_funcs.c\
 ft_fullpath.c\
 ft_longaboutfile.c\
 ft_longfilemode.c\
@@ -38,11 +38,12 @@ $(NAME): $(OBJS)
 	@$(C) $(FLAGS) $(OBJS) -I$(HEADER) -Llibrary -lftprintf -o $(NAME)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
+	@mkdir -p $(DIR_O)
 	@$(C) $(FLAGS) -I$(HEADER) -o $@ -c $<
 
 clean:
 	@make clean -C library
-	@rm -f $(OBJS)
+	@rm -rf $(DIR_O)
 
 fclean: clean
 	@make fclean -C library

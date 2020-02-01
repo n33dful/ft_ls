@@ -55,10 +55,11 @@ $(NAME): $(OBJS)
 	@ranlib $(NAME)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
+	@mkdir -p $(DIR_O)
 	@$(C) $(FLAGS) -I$(HEADER) -o $@ -c $<
 
 clean:
-	@rm -f $(OBJS)
+	@rm -rf $(DIR_O)
 	@make clean -C $(LIBFT)
 
 fclean: clean

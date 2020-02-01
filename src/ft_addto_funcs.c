@@ -33,7 +33,7 @@ static t_list	*ft_singlefile(char *filename, t_lsflags *flags)
 	return (file);
 }
 
-void			ft_create_error_list(char *argv, t_list **errlst)
+void			ft_addto_errorslist(char *argv, t_list **errlst)
 {
 	struct stat	st;
 	t_list		*new;
@@ -51,7 +51,7 @@ void			ft_create_error_list(char *argv, t_list **errlst)
 	errno = 0;
 }
 
-void			ft_create_file_list(char *argv, t_lsflags *flags, \
+void			ft_addto_fileslist(char *argv, t_lsflags *flags, \
 t_list **sinlst)
 {
 	struct stat	stdir;
@@ -75,7 +75,7 @@ stat(argv, &stdir) == 0 && (stdir.st_mode & S_IFMT) == S_IFDIR && !flags->ell)
 	errno = 0;
 }
 
-void			ft_create_folder_list(char *argv, t_lsflags *flags, \
+void			ft_addto_dirslist(char *argv, t_lsflags *flags, \
 t_list **dirs)
 {
 	struct stat	st;

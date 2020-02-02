@@ -31,6 +31,7 @@ static int	ft_setdirent(struct dirent *dirent, char *dir, t_aboutfile *about)
 
 static void	*ft_memerror(t_list **files, DIR *dir)
 {
+	errno = 12;
 	ft_lstdel(files, lstdel_func);
 	closedir(dir);
 	return (NULL);

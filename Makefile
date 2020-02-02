@@ -12,7 +12,7 @@
 
 C=gcc
 NAME=ft_ls
-FLAGS=-Wall -Wextra -Werror -O3
+FLAGS=-Wall -Wextra -Werror
 DIR_S=src
 DIR_O=temp
 HEADER=incl

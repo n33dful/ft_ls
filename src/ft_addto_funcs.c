@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_addto_funcs.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/26 21:18:02 by cdarci            #+#    #+#             */
+/*   Updated: 2020/01/30 19:29:05 by cdarci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int		errsort(t_list *curr, t_list *next)
+static int		lstsort_bystring(t_list *curr, t_list *next)
 {
 	char	*first;
 	char	*second;
@@ -47,7 +58,7 @@ void			ft_addto_errorslist(char *argv, t_list **errlst)
 		}
 		ft_lstadd_back(errlst, new);
 	}
-	ft_lstsort(errlst, errsort);
+	ft_lstsort(errlst, lstsort_bystring);
 	errno = 0;
 }
 
@@ -93,6 +104,6 @@ t_list **dirs)
 		}
 		ft_lstadd_back(dirs, new);
 	}
-	ft_lstsort(dirs, errsort);
+	ft_lstsort(dirs, lstsort_bystring);
 	errno = 0;
 }

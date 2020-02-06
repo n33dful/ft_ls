@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:18:13 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/31 11:46:31 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/02/06 16:11:32 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,16 @@ void				ft_elltime(t_aboutfile *about);
 void				ft_elluser(int width, uid_t uid, t_lsflags *flags);
 void				ft_longformat(t_list *files);
 void				ft_printfiles(t_list *files);
-void				ft_statcpy(t_aboutfile *about, t_lsflags *flags, struct stat *st);
+void				ft_statcpy(t_aboutfile *about, t_lsflags *flags, \
+		struct stat *st);
 void				ft_printfilename(t_list *file);
 
 void				lstdel_func(void *content, size_t content_size);
 int					lstsort_func(t_list *current, t_list *next);
 void				ft_addto_errorslist(char *argv, t_list **errlst);
-void				ft_addto_fileslist(char *argv, t_lsflags *flags, t_list **sinlst);
-void				ft_addto_dirslist(char *argv, t_lsflags *flags, t_list **dirs);
+void				ft_addto_fileslist(char *argv, t_lsflags *flags, \
+		t_list **sinlst);
+void				ft_addto_dirslist(char *argv, t_lsflags *flags, \
+		t_list **dirs);
 
 #endif

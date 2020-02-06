@@ -6,7 +6,7 @@
 /*   By: cdarci <cdarci@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/26 21:21:42 by cdarci            #+#    #+#             */
-/*   Updated: 2020/01/26 21:21:46 by cdarci           ###   ########.fr       */
+/*   Updated: 2020/02/06 16:33:28 by cdarci           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	by_size(t_list *current, t_list *next)
 		return (1);
 	else if (flags->reverse && first->st_size > second->st_size)
 		return (1);
-	else if (flags->reverse && first->st_size == second->st_size)
+	else if (first->st_size == second->st_size)
 		return (by_name(current, next));
 	return (0);
 }
@@ -61,7 +61,7 @@ static int	by_time(t_list *current, t_list *next)
 		return (1);
 	else if (flags->reverse && first->m_time > second->m_time)
 		return (1);
-	else if (flags->reverse && first->m_time == second->m_time)
+	else if (first->m_time == second->m_time)
 		return (by_name(current, next));
 	return (0);
 }
